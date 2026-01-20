@@ -5,7 +5,7 @@ interface HeaderProps {
 
 export function Header({ onToggleSidebar, sidebarOpen }: HeaderProps) {
 	return (
-		<header className="flex items-center justify-between px-4 py-3 border-b border-vscode-border bg-vscode-card-bg">
+		<header className="flex items-center justify-between px-4 py-3 bg-vscode-card-bg">
 			<div className="flex items-center gap-2">
 				<span className="text-2xl" role="img" aria-label="Abacate">
 					🥑

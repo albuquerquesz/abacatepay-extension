@@ -12,7 +12,7 @@ function formatTimestamp(date: Date): string {
 	}).format(date);
 }
 
-export function ChatMesage({ message }: ChatMessageProps) {
+export function ChatMessage({ message }: ChatMessageProps) {
 	const isUser = message.role === "user";
 
 	return (

@@ -69,7 +69,7 @@ export function ChatContainer() {
 
 			setMessages((prev) => [...prev, assistantMessage]);
 			setIsLoading(false);
-		}, 1000);
+		}, 5000);
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -101,7 +101,7 @@ export function ChatContainer() {
 				`}
 				>
 					<Sidebar isOpen={sidebarOpen}>
-						<div className="p-3 border-b border-vscode-border">
+						<div className="p-3">
 							<button
 								type="button"
 								onClick={handleNewConversation}
@@ -174,8 +174,8 @@ export function ChatContainer() {
 											max-w-[80%] px-4 py-3 rounded-lg
 											${
 												message.role === "user"
-													? "bg-abacate-primary text-abacate-dark"
-													: "bg-vscode-card-bg border border-vscode-border text-vscode-fg"
+													? "bg-[#9EEA6C] text-black"
+													: "bg-black/30 text-vscode-fg"
 											}
 										`}
 									>
@@ -188,41 +188,58 @@ export function ChatContainer() {
 						)}
 
 						{isLoading && (
-							<div className="flex justify-start">
-								<div className="bg-vscode-card-bg border border-vscode-border px-4 py-3 rounded-lg">
-									<div className="flex items-center gap-1">
-										<span className="w-2 h-2 bg-abacate-primary rounded-full animate-bounce" />
-										<span
-											className="w-2 h-2 bg-abacate-primary rounded-full animate-bounce"
-											style={{ animationDelay: "0.1s" }}
-										/>
-										<span
-											className="w-2 h-2 bg-abacate-primary rounded-full animate-bounce"
-											style={{ animationDelay: "0.2s" }}
-										/>
-									</div>
+							<div className="flex justify-start items-center gap-3">
+								<div className="w-8 h-8 rounded-full bg-[#9EEA6C]/20 flex items-center justify-center">
+									<span className="text-lg">🥑</span>
+								</div>
+								<div className="flex items-center gap-1.5 px-4 py-3">
+									<span className="w-2.5 h-2.5 bg-[#9EEA6C] rounded-full typing-dot" />
+									<span className="w-2.5 h-2.5 bg-[#9EEA6C] rounded-full typing-dot" />
+									<span className="w-2.5 h-2.5 bg-[#9EEA6C] rounded-full typing-dot" />
 								</div>
 							</div>
 						)}
 					</div>
 
-					<div className="border-t border-vscode-border p-4">
-						<div className="flex gap-2">
+					<div className="p-4">
+						<div className="flex items-end gap-2 bg-black/40 rounded-lg p-4 border border-white/10 focus-within:border-[#9EEA6C] transition-colors">
 							<textarea
 								value={inputValue}
 								onChange={(e) => setInputValue(e.target.value)}
 								onKeyDown={handleKeyDown}
-								placeholder="Digite sua mensagem..."
+								placeholder="Envie uma mensagem..."
 								rows={1}
-								className="flex-1 bg-vscode-input-bg text-vscode-input-fg border border-vscode-input-border rounded-lg px-4 py-3 text-sm resize-none outline-none focus:ring-1 focus:ring-abacate-primary"
+								className="flex-1 bg-transparent text-vscode-fg text-sm resize-none outline-none border-none focus:outline-none focus:ring-0 placeholder:text-vscode-fg/40 py-2 px-1 max-h-32"
+								style={{ height: "auto" }}
+								ref={(textarea) => {
+									if (textarea) {
+										textarea.style.height = "auto";
+										textarea.style.height =
+											Math.min(textarea.scrollHeight, 128) + "px";
+									}
+								}}
 							/>
 							<button
 								type="button"
 								onClick={handleSendMessage}
 								disabled={!inputValue.trim() || isLoading}
-								className="px-4 py-2 bg-abacate-primary hover:bg-abacate-secondary disabled:bg-vscode-input-bg disabled:text-vscode-fg/50 text-abacate-dark font-medium rounded-lg transition-colors cursor-pointer disabled:cursor-not-allowed"
+								className="p-1.5 rounded-md bg-[#9EEA6C] text-black disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-opacity"
+								aria-label="Enviar"
 							>
-								Enviar
+								<svg
+									className="w-4 h-4"
+									fill="none"
+									stroke="currentColor"
+									strokeWidth={2.5}
+									viewBox="0 0 24 24"
+									aria-hidden="true"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										d="M5 15l7-7 7 7"
+									/>
+								</svg>
 							</button>
 						</div>
 					</div>

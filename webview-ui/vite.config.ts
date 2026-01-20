@@ -14,4 +14,9 @@ export default defineConfig({
 			},
 		},
 	},
+	base: "./",
+	define: {
+		"import.meta.env.DEV": JSON.stringify(false),
+		"import.meta.env.PROD": JSON.stringify(true),
+	},
 });

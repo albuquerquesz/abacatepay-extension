@@ -12,7 +12,6 @@ export function Sidebar({ isOpen, children }: SidebarProps) {
 				${isOpen ? "w-64" : "w-0"}
 				h-full
 				bg-vscode-card-bg
-				border-r border-vscode-border
 				transition-all duration-300 ease-in-out
 				overflow-hidden
 				shrink-0
