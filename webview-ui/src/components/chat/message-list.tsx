@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { Message } from "../../types/chat";
-import { LoadingDots } from "../ui/LoadingDots";
-import { ChatMessage } from "./ChatMessage";
+import { LoadingDots } from "../ui/loading-dots";
+import { ChatMessage } from "./chat-message";
 
 interface MessageListProps {
 	messages: Message[];

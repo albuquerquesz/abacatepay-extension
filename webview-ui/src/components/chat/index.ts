@@ -1,3 +1,3 @@
-export { ChatMessage } from "./ChatMessage";
-export { MarkdownRenderer } from "./MarkdownRenderer";
-export { MessageList } from "./MessageList";
+export { ChatMessage } from "./chat-message";
+export { MarkdownRenderer } from "./markdown-renderer";
+export { MessageList } from "./message-list";

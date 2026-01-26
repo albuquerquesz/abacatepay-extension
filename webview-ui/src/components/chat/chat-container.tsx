@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useAutoScroll } from "../../hooks/useAutoScroll";
 import type { Conversation, Message } from "../../types/chat";
-import { Header } from "../layout/Header";
-import { Sidebar } from "../layout/Sidebar";
+import { Header } from "../layout/header";
+import { Sidebar } from "../layout/sidebar";
 
 export function ChatContainer() {
 	const [sidebarOpen, setSidebarOpen] = useState(false);

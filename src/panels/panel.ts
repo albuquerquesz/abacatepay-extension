@@ -2,8 +2,8 @@ import * as vscode from "vscode";
 import { getNonce } from "../utils/getNonce";
 import { getUri } from "../utils/getUri";
 
-export class AbacatePayPanel {
-	public static currentPanel: AbacatePayPanel | undefined;
+export class Panel {
+	public static currentPanel: Panel | undefined;
 	private readonly _panel: vscode.WebviewPanel;
 	private readonly _extensionUri: vscode.Uri;
 	private _disposables: vscode.Disposable[] = [];
@@ -20,8 +20,8 @@ export class AbacatePayPanel {
 	}
 
 	public static render(extensionUri: vscode.Uri) {
-		if (AbacatePayPanel.currentPanel) {
-			AbacatePayPanel.currentPanel._panel.reveal(vscode.ViewColumn.One);
+		if (Panel.currentPanel) {
+			Panel.currentPanel._panel.reveal(vscode.ViewColumn.One);
 			return;
 		}
 
@@ -39,11 +39,11 @@ export class AbacatePayPanel {
 			},
 		);
 
-		AbacatePayPanel.currentPanel = new AbacatePayPanel(panel, extensionUri);
+		Panel.currentPanel = new Panel(panel, extensionUri);
 	}
 
 	public dispose() {
-		AbacatePayPanel.currentPanel = undefined;
+		Panel.currentPanel = undefined;
 
 		this._panel.dispose();
 

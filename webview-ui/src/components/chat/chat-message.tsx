@@ -1,5 +1,5 @@
 import type { Message } from "../../types/chat";
-import { MarkdownRenderer } from "./MarkdownRenderer";
+import { MarkdownRenderer } from "./markdown-renderer";
 
 interface ChatMessageProps {
 	message: Message;
