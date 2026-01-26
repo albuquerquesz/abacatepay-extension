@@ -1,3 +1,5 @@
+import { Menu, X } from "lucide-react";
+
 interface HeaderProps {
 	onToggleSidebar: () => void;
 	sidebarOpen: boolean;
@@ -22,29 +24,11 @@ export function Header({ onToggleSidebar, sidebarOpen }: HeaderProps) {
 				aria-label={sidebarOpen ? "Fechar sidebar" : "Abrir sidebar"}
 				aria-expanded={sidebarOpen}
 			>
-				<svg
-					className="w-5 h-5 text-vscode-fg"
-					fill="none"
-					stroke="currentColor"
-					viewBox="0 0 24 24"
-					aria-hidden="true"
-				>
-					{sidebarOpen ? (
-						<path
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							strokeWidth={2}
-							d="M6 18L18 6M6 6l12 12"
-						/>
-					) : (
-						<path
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							strokeWidth={2}
-							d="M4 6h16M4 12h16M4 18h16"
-						/>
-					)}
-				</svg>
+				{sidebarOpen ? (
+					<X className="w-5 h-5 text-vscode-fg" />
+				) : (
+					<Menu className="w-5 h-5 text-vscode-fg" />
+				)}
 			</button>
 		</header>
 	);

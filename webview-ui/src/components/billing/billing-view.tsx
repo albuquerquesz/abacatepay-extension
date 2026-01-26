@@ -1,34 +1,65 @@
-export function BillingView() {
-	return (
-		<div className="flex flex-col items-center justify-center min-h-screen bg-vscode-bg text-vscode-fg p-6">
-			<div className="text-center mb-8">
-				<span className="text-5xl mb-4 block">💳</span>
-				<h1 className="text-2xl font-bold text-abacate-primary mb-2">
-					Billing
-				</h1>
-				<p className="text-sm text-vscode-fg/70">
-					Gerencie cobranças e pagamentos
-				</p>
-			</div>
+import { QrCode, CreditCard, ReceiptText } from "lucide-react";
 
-			<div className="bg-vscode-card-bg rounded-lg p-6 max-w-md w-full shadow-lg">
-				<p className="mb-4 text-sm leading-relaxed">
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-					eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-					minim veniam, quis nostrud exercitation ullamco laboris.
-				</p>
-				<p className="mb-4 text-sm leading-relaxed">
-					Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-					dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-					proident, sunt in culpa qui officia deserunt mollit anim id est
-					laborum.
-				</p>
-				<p className="text-sm leading-relaxed">
-					Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-					accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae
-					ab illo inventore veritatis.
-				</p>
-			</div>
-		</div>
-	);
+interface MenuItemProps {
+  icon: React.ReactNode;
+  label: string;
+  description: string;
+  onClick: () => void;
+}
+
+function MenuItem({ icon, label, description, onClick }: MenuItemProps) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="w-full flex items-center gap-4 p-4 rounded-xl bg-black/30 hover:bg-abacate-primary/10 border border-white/5 hover:border-abacate-primary/30 transition-all cursor-pointer text-left group"
+    >
+      <div className="text-vscode-fg/70 group-hover:text-abacate-primary transition-colors">
+        {icon}
+      </div>
+      <div>
+        <h3 className="text-sm font-semibold text-vscode-fg group-hover:text-abacate-primary transition-colors">{label}</h3>
+        <p className="text-xs text-vscode-fg/50 line-clamp-1">{description}</p>
+      </div>
+    </button>
+  );
+}
+
+export function BillingView() {
+  const handleCreatePixQRCode = () => {
+    console.log("Criar Pix QRCode");
+  };
+
+  const handleCreateCheckout = () => {
+    console.log("Criar Checkout");
+  };
+
+  return (
+    <div className="flex flex-col h-full bg-vscode-bg text-vscode-fg p-5">
+      <div className="mb-6">
+        <h1 className="text-xl font-bold text-abacate-primary flex items-center gap-2">
+          <ReceiptText size={24} strokeWidth={2.5} />
+          Billing
+        </h1>
+        <p className="text-xs text-vscode-fg/50 mt-1 ml-8">
+          Gerencie cobranças e pagamentos de forma simples
+        </p>
+      </div>
+
+      <div className="space-y-3">
+        <MenuItem
+          icon={<QrCode size={22} strokeWidth={1.5} />}
+          label="Criar Pix QRCode"
+          description="Gere um QRCode estático ou dinâmico para Pix"
+          onClick={handleCreatePixQRCode}
+        />
+        <MenuItem
+          icon={<CreditCard size={22} strokeWidth={1.5} />}
+          label="Criar Checkout"
+          description="Página de pagamento segura e otimizada"
+          onClick={handleCreateCheckout}
+        />
+      </div>
+    </div>
+  );
 }

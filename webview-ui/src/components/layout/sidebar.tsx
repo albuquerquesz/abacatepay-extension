@@ -27,7 +27,7 @@ export function Sidebar({
 					type="button"
 					onClick={onNewConversation}
 					title="Nova conversa"
-					className="w-full h-7 flex items-center justify-center text-sm bg-abacate-primary hover:bg-abacate-secondary text-abacate-dark font-bold rounded transition-colors cursor-pointer"
+					className="w-full h-8 flex items-center justify-center text-xl bg-abacate-primary hover:bg-abacate-secondary text-abacate-dark font-bold rounded transition-colors cursor-pointer"
 				>
 					+
 				</button>

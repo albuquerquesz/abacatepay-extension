@@ -6,6 +6,7 @@ import { BillingView } from "../billing/billing-view";
 import { ActivityBar } from "../layout/activity-bar";
 import { Sidebar } from "../layout/sidebar";
 import { WebhooksView } from "../webhooks/webhooks-view";
+import { ArrowUp, Sparkles } from "lucide-react";
 
 export function ChatContainer() {
 	const [activeView, setActiveView] = useState<ViewType>("chat");
@@ -89,8 +90,11 @@ export function ChatContainer() {
 				className="flex-1 overflow-y-auto p-4 space-y-4"
 			>
 				{messages.length === 0 ? (
-					<div className="flex flex-col items-center justify-center h-full text-center">
-						<span className="text-5xl mb-3">🥑</span>
+					<div className="flex flex-col items-center justify-center h-full text-center p-6">
+						<div className="relative mb-4">
+							<span className="text-6xl">🥑</span>
+							<Sparkles className="absolute -top-2 -right-2 text-abacate-primary animate-pulse" size={24} />
+						</div>
 						<h2 className="text-lg font-semibold text-vscode-fg mb-1">
 							AbacatePay Assistant
 						</h2>
@@ -155,22 +159,10 @@ export function ChatContainer() {
 						type="button"
 						onClick={handleSendMessage}
 						disabled={!inputValue.trim() || isLoading}
-						className="p-1.5 rounded-md bg-[#9EEA6C] text-black disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-opacity"
+						className="p-1.5 rounded-md bg-[#9EEA6C] text-black disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-opacity flex items-center justify-center"
 						aria-label="Enviar"
 					>
-						<svg
-							className="w-4 h-4"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth={2.5}
-							viewBox="0 0 24 24"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								d="M5 15l7-7 7 7"
-							/>
-						</svg>
+						<ArrowUp size={16} strokeWidth={3} />
 					</button>
 				</div>
 			</div>

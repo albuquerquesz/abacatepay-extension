@@ -1,4 +1,5 @@
 import type { ViewType } from "../../types/navigation";
+import { MessageSquare, CreditCard, Webhook } from "lucide-react";
 
 interface ActivityBarProps {
 	activeView: ViewType;
@@ -6,7 +7,7 @@ interface ActivityBarProps {
 }
 
 interface ActivityBarItemProps {
-	icon: string;
+	icon: React.ReactNode;
 	label: string;
 	isActive: boolean;
 	onClick: () => void;
@@ -24,7 +25,7 @@ function ActivityBarItem({
 			onClick={onClick}
 			title={label}
 			className={`
-				w-full aspect-square flex items-center justify-center text-xl
+				w-full aspect-square flex items-center justify-center
 				transition-colors cursor-pointer relative
 				${
 					isActive
@@ -36,15 +37,15 @@ function ActivityBarItem({
 			{isActive && (
 				<span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 bg-abacate-primary rounded-r" />
 			)}
-			<span>{icon}</span>
+			{icon}
 		</button>
 	);
 }
 
-const navItems: { id: ViewType; icon: string; label: string }[] = [
-	{ id: "chat", icon: "💬", label: "Chat" },
-	{ id: "billing", icon: "💳", label: "Billing" },
-	{ id: "webhooks", icon: "🔗", label: "Webhooks" },
+const navItems: { id: ViewType; icon: React.ReactNode; label: string }[] = [
+	{ id: "chat", icon: <MessageSquare size={20} />, label: "Chat" },
+	{ id: "billing", icon: <CreditCard size={20} />, label: "Billing" },
+	{ id: "webhooks", icon: <Webhook size={20} />, label: "Webhooks" },
 ];
 
 export function ActivityBar({ activeView, onViewChange }: ActivityBarProps) {

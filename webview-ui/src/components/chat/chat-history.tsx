@@ -1,49 +1,11 @@
 import type { Conversation } from "../../types/chat";
+import { Plus, MessageSquare } from "lucide-react";
 
 interface ChatHistoryProps {
 	conversations: Conversation[];
 	activeId: string | null;
 	onSelect: (id: string) => void;
 	onNewChat: () => void;
-}
-
-function PlusIcon() {
-	return (
-		<svg
-			width="24"
-			height="24"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			strokeWidth="2"
-			strokeLinecap="round"
-			strokeLinejoin="round"
-			aria-hidden="true"
-		>
-			<title>Adicionar</title>
-			<line x1="12" y1="5" x2="12" y2="19" />
-			<line x1="5" y1="12" x2="19" y2="12" />
-		</svg>
-	);
-}
-
-function ChatIcon() {
-	return (
-		<svg
-			width="14"
-			height="14"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			strokeWidth="2"
-			strokeLinecap="round"
-			strokeLinejoin="round"
-			aria-hidden="true"
-		>
-			<title>Conversa</title>
-			<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-		</svg>
-	);
 }
 
 function formatDate(date: Date): string {
@@ -85,7 +47,8 @@ export function ChatHistory({
             focus:outline-none focus:ring-2 focus:ring-[#4ADE80]/50
           "
 				>
-					<PlusIcon />
+					<Plus size={18} />
+					Nova conversa
 				</button>
 			</div>
 
@@ -124,7 +87,7 @@ export function ChatHistory({
                         ${isActive ? "text-[#4ADE80]" : "text-vscode-fg/50"}
                       `}
 										>
-											<ChatIcon />
+											<MessageSquare size={14} />
 										</span>
 
 										<div className="flex-1 min-w-0">
