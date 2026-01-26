@@ -43,12 +43,12 @@
         "abacatepay.cliPath": {
           "type": "string",
           "default": "abacate",
-          "description": "Caminho para o executável da CLI do AbacatePay."
+          "description": "Caminho para o executável da CLI da AbacatePay."
         },
         "abacatepay.apiKey": {
           "type": "string",
           "default": "",
-          "description": "API Key do AbacatePay (preenchida automaticamente após o login)."
+          "description": "API Key da AbacatePay (preenchida automaticamente após o login)."
         }
       }
     }
