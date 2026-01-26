@@ -102,14 +102,26 @@ export class Panel {
 				const { command, data } = message;
 
 				switch (command) {
+					case "check-auth": {
+						const config = vscode.workspace.getConfiguration('abacatepay');
+						const apiKey = config.get('apiKey');
+						webview.postMessage({ 
+							command: "auth-status", 
+							isAuthenticated: !!apiKey 
+						});
+						break;
+					}
+					case "login-google": {
+						vscode.window.showInformationMessage("Autenticando com AbacatePay...");
+						await vscode.workspace.getConfiguration('abacatepay').update('apiKey', 'mock-key-123', vscode.ConfigurationTarget.Global);
+						webview.postMessage({ 
+							command: "auth-status", 
+							isAuthenticated: true 
+						});
+						break;
+					}
 					case "showInfo":
 						vscode.window.showInformationMessage(data as string);
-						break;
-					case "showError":
-						vscode.window.showErrorMessage(data as string);
-						break;
-					case "login-google":
-						vscode.window.showInformationMessage("Iniciando login com Google...");
 						break;
 					default:
 						break;
