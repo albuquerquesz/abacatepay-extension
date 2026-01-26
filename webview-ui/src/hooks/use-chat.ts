@@ -26,7 +26,7 @@ function generateTitle(firstMessage: string): string {
 	if (firstMessage.length <= maxLength) {
 		return firstMessage;
 	}
-	return firstMessage.slice(0, maxLength).trim() + "...";
+	return `${firstMessage.slice(0, maxLength).trim()}...`;
 }
 
 interface UseChatReturn {

@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
-import { getNonce } from "../utils/getNonce";
-import { getUri } from "../utils/getUri";
+import { getNonce } from "../utils/get-nonce";
+import { getUri } from "../utils/get-uri";
 
 export class Panel {
 	public static currentPanel: Panel | undefined;
@@ -107,6 +107,9 @@ export class Panel {
 						break;
 					case "showError":
 						vscode.window.showErrorMessage(data as string);
+						break;
+					case "login-google":
+						vscode.window.showInformationMessage("Iniciando login com Google...");
 						break;
 					default:
 						break;

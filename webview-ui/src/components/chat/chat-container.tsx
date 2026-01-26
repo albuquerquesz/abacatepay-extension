@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAutoScroll } from "../../hooks/useAutoScroll";
+import { useAutoScroll } from "../../hooks/use-autoscroll";
 import type { Conversation, Message } from "../../types/chat";
 import { Header } from "../layout/header";
 import { Sidebar } from "../layout/sidebar";
@@ -214,8 +214,7 @@ export function ChatContainer() {
 								ref={(textarea) => {
 									if (textarea) {
 										textarea.style.height = "auto";
-										textarea.style.height =
-											Math.min(textarea.scrollHeight, 128) + "px";
+										textarea.style.height = `${Math.min(textarea.scrollHeight, 128)}px`;
 									}
 								}}
 							/>
