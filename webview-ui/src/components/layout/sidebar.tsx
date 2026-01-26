@@ -22,12 +22,12 @@ export function Sidebar({
 }: SidebarProps) {
 	return (
 		<aside className="w-32 h-full bg-vscode-card-bg border-r border-white/5 flex flex-col shrink-0 overflow-hidden">
-			<div className="p-2 flex justify-center">
+			<div className="p-2">
 				<button
 					type="button"
 					onClick={onNewConversation}
 					title="Nova conversa"
-					className="w-7 h-7 flex items-center justify-center text-sm bg-abacate-primary hover:bg-abacate-secondary text-abacate-dark font-bold rounded transition-colors cursor-pointer"
+					className="w-full h-7 flex items-center justify-center text-sm bg-abacate-primary hover:bg-abacate-secondary text-abacate-dark font-bold rounded transition-colors cursor-pointer"
 				>
 					+
 				</button>

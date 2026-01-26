@@ -24,37 +24,46 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 
 		webviewView.webview.onDidReceiveMessage(async (data) => {
 			switch (data.command) {
-        case "check-auth": {
-          const config = vscode.workspace.getConfiguration('abacatepay');
-          const apiKey = config.get('apiKey');
-          
-          webviewView.webview.postMessage({ 
-            command: "auth-status", 
-            isAuthenticated: !!apiKey 
-          });
-          break;
-        }
-        case "login-google": {
-          vscode.window.showInformationMessage("Autenticando com AbacatePay...");
-          
-          // Salva uma chave mockada nas configurações do VS Code
-          await vscode.workspace.getConfiguration('abacatepay').update('apiKey', 'mock-key-123', vscode.ConfigurationTarget.Global);
-          
-          webviewView.webview.postMessage({ 
-            command: "auth-status", 
-            isAuthenticated: true 
-          });
-          break;
-        }
-        case "logout": {
-          await vscode.workspace.getConfiguration('abacatepay').update('apiKey', undefined, vscode.ConfigurationTarget.Global);
-          webviewView.webview.postMessage({ 
-            command: "auth-status", 
-            isAuthenticated: false 
-          });
-          vscode.window.showInformationMessage("Sessão encerrada.");
-          break;
-        }
+				case "check-auth": {
+					const config = vscode.workspace.getConfiguration("abacatepay");
+					const apiKey = config.get("apiKey");
+
+					webviewView.webview.postMessage({
+						command: "auth-status",
+						isAuthenticated: !!apiKey,
+					});
+					break;
+				}
+				case "login-google": {
+					vscode.window.showInformationMessage(
+						"Autenticando com AbacatePay...",
+					);
+
+					await vscode.workspace
+						.getConfiguration("abacatepay")
+						.update(
+							"apiKey",
+							"mock-key-123",
+							vscode.ConfigurationTarget.Global,
+						);
+
+					webviewView.webview.postMessage({
+						command: "auth-status",
+						isAuthenticated: true,
+					});
+					break;
+				}
+				case "logout": {
+					await vscode.workspace
+						.getConfiguration("abacatepay")
+						.update("apiKey", undefined, vscode.ConfigurationTarget.Global);
+					webviewView.webview.postMessage({
+						command: "auth-status",
+						isAuthenticated: false,
+					});
+					vscode.window.showInformationMessage("Sessão encerrada.");
+					break;
+				}
 				case "showInfo": {
 					vscode.window.showInformationMessage(data.data);
 					break;

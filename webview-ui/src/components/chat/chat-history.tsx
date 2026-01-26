@@ -10,8 +10,8 @@ interface ChatHistoryProps {
 function PlusIcon() {
 	return (
 		<svg
-			width="16"
-			height="16"
+			width="24"
+			height="24"
 			viewBox="0 0 24 24"
 			fill="none"
 			stroke="currentColor"
@@ -73,7 +73,6 @@ export function ChatHistory({
 					type="button"
 					onClick={onNewChat}
 					className="
-            flex items-center justify-center gap-2
             w-full
             px-3 py-2
             text-sm font-medium
@@ -87,7 +86,6 @@ export function ChatHistory({
           "
 				>
 					<PlusIcon />
-					Nova conversa
 				</button>
 			</div>
 
