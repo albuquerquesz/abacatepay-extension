@@ -22,14 +22,20 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "abacatepay",
+          "id": "abacatepay-sidebar",
           "title": "AbacatePay",
-          "icon": "resources/icon.svg"
+          "icon": "$(credit-card)"
         }
       ]
     },
     "views": {
-      "abacatepay": []
+      "abacatepay-sidebar": [
+        {
+          "type": "webview",
+          "id": "abacatepay-view",
+          "name": "AbacatePay"
+        }
+      ]
     }
   },
   "scripts": {

@@ -1,3 +1,4 @@
+import logoAbacate from "../../assets/logo-abkt.jpeg";
 import { vscode } from "../../utils/vscode";
 import { Button } from "../ui/button";
 
@@ -18,8 +19,12 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
 		<div className="flex flex-col items-center justify-center h-screen w-full bg-vscode-bg text-vscode-fg p-6 animate-fade-in">
 			<div className="flex flex-col items-center gap-10 max-w-sm w-full">
 				<div className="flex flex-col items-center gap-0">
-					<div className="text-[120px] leading-none select-none filter drop-shadow-md">
-						🥑
+					<div className="w-48 h-48 flex items-center justify-center select-none overflow-hidden">
+						<img
+							src={logoAbacate}
+							alt="AbacatePay Logo"
+							className="w-full h-full object-contain brightness-100 contrast-100 drop-shadow-lg"
+						/>
 					</div>
 					<div className="text-center mt-4">
 						<h1 className="text-4xl font-bold bg-gradient-to-r from-abacate-light via-abacate-primary to-abacate-secondary bg-clip-text text-transparent">
@@ -70,4 +75,3 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
 		</div>
 	);
 }
-
