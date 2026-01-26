@@ -1,5 +1,3 @@
-import { ReceiptText } from "lucide-react";
-
 interface MenuItemProps {
   label: string;
   description: string;
@@ -37,7 +35,6 @@ export function BillingView() {
     <div className="flex flex-col h-full bg-vscode-bg text-vscode-fg p-5">
       <div className="mb-6">
         <h1 className="text-xl font-bold text-abacate-primary flex items-center gap-2">
-          <ReceiptText size={22} strokeWidth={2.5} />
           Billing
         </h1>
         <p className="text-xs text-vscode-fg/50 mt-1 ml-8">
