@@ -24,7 +24,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 									<button
 										type="button"
 										onClick={() => navigator.clipboard.writeText(codeString)}
-										className="text-xs text-gray-400 hover:text-[#4ADE80] transition-colors"
+										className="text-xs text-gray-400 hover:text-[#9EEA6C] transition-colors"
 									>
 										Copiar
 									</button>
@@ -49,7 +49,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
 					return (
 						<code
-							className="px-1.5 py-0.5 rounded bg-[#2d2d2d] text-[#4ADE80] text-sm font-mono"
+							className="px-1.5 py-0.5 rounded bg-[#2d2d2d] text-[#9EEA6C] text-sm font-mono"
 							{...props}
 						>
 							{children}
@@ -96,7 +96,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 						href={href}
 						target="_blank"
 						rel="noopener noreferrer"
-						className="text-[#4ADE80] hover:underline"
+						className="text-[#9EEA6C] hover:underline"
 					>
 						{children}
 					</a>
@@ -110,7 +110,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 				),
 
 				blockquote: ({ children }) => (
-					<blockquote className="border-l-4 border-[#4ADE80] pl-4 my-2 text-gray-400 italic">
+					<blockquote className="border-l-4 border-[#9EEA6C] pl-4 my-2 text-gray-400 italic">
 						{children}
 					</blockquote>
 				),

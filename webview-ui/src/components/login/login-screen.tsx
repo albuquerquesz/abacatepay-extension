@@ -16,7 +16,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
 	};
 
 	return (
-		<div className="flex flex-col items-center justify-center h-screen w-full bg-vscode-bg text-vscode-fg p-6 animate-fade-in">
+		<div className="flex flex-col items-center justify-center h-screen w-full bg-vscode-bg text-vscode-fg p-6 animate-fade-in border-l border-vscode-subtle-border">
 			<div className="flex flex-col items-center gap-10 max-w-sm w-full">
 				<div className="flex flex-col items-center gap-0">
 					<div className="w-48 h-48 flex items-center justify-center select-none overflow-hidden">

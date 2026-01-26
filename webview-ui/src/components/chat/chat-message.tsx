@@ -29,7 +29,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
         `}
 			>
 				{!isUser && (
-					<div className="shrink-0 w-8 h-8 rounded-full bg-[#4ADE80]/20 flex items-center justify-center">
+					<div className="shrink-0 w-8 h-8 rounded-full bg-[#9EEA6C]/20 flex items-center justify-center">
 						<span className="text-lg" role="img" aria-label="Abacate Assistant">
 							🥑
 						</span>
@@ -42,7 +42,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
               px-4 py-3 rounded-2xl
               ${
 								isUser
-									? "bg-[#4ADE80]/20 text-vscode-fg rounded-br-md"
+									? "bg-[#9EEA6C]/20 text-vscode-fg rounded-br-md"
 									: "bg-vscode-card-bg border border-vscode-border rounded-bl-md"
 							}
             `}

@@ -1,10 +1,10 @@
 :root {
-	--abacate-primary: #4ade80;
-	--abacate-secondary: #22c55e;
-	--abacate-light: #86efac;
-	--abacate-dark: #166534;
+	--abacate-primary: #9eea6c;
+	--abacate-secondary: #8bd85a;
+	--abacate-light: #b5f094;
+	--abacate-dark: #5a8f3e;
 
-	--abacate-primary-10: rgba(74, 222, 128, 0.1);
-	--abacate-primary-20: rgba(74, 222, 128, 0.2);
-	--abacate-primary-30: rgba(74, 222, 128, 0.3);
+	--abacate-primary-10: rgba(158, 234, 108, 0.1);
+	--abacate-primary-20: rgba(158, 234, 108, 0.2);
+	--abacate-primary-30: rgba(158, 234, 108, 0.3);
 }

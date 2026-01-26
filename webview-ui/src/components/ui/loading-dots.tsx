@@ -6,7 +6,7 @@ interface LoadingDotsProps {
 
 export function LoadingDots({
 	size = 6,
-	color = "#4ADE80",
+	color = "#9EEA6C",
 	className = "",
 }: LoadingDotsProps) {
 	return (
@@ -40,7 +40,7 @@ interface LoadingWithTextProps extends LoadingDotsProps {
 export function LoadingWithText({
 	text = "Pensando",
 	size = 4,
-	color = "#4ADE80",
+	color = "#9EEA6C",
 	className = "",
 }: LoadingWithTextProps) {
 	return (

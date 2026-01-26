@@ -37,7 +37,7 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
 
 			{isLoading && (
 				<div className="flex items-start gap-3 animate-fade-in">
-					<div className="shrink-0 w-8 h-8 rounded-full bg-[#4ADE80]/20 flex items-center justify-center">
+					<div className="shrink-0 w-8 h-8 rounded-full bg-[#9EEA6C]/20 flex items-center justify-center">
 						<span className="text-lg" role="img" aria-label="Abacate Assistant">
 							🥑
 						</span>

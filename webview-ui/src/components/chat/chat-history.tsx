@@ -1,5 +1,5 @@
+import { MessageSquare, Plus } from "lucide-react";
 import type { Conversation } from "../../types/chat";
-import { Plus, MessageSquare } from "lucide-react";
 
 interface ChatHistoryProps {
 	conversations: Conversation[];
@@ -39,12 +39,12 @@ export function ChatHistory({
             px-3 py-2
             text-sm font-medium
             text-black
-            bg-[#4ADE80]
+            bg-[#9EEA6C]
             rounded-md
-            hover:bg-[#22C55E]
-            active:bg-[#16A34A]
+            hover:bg-[#8BD85A]
+            active:bg-[#7ACC4A]
             transition-colors duration-150
-            focus:outline-none focus:ring-2 focus:ring-[#4ADE80]/50
+            focus:outline-none focus:ring-2 focus:ring-[#9EEA6C]/50
           "
 				>
 					<Plus size={18} />
@@ -76,7 +76,7 @@ export function ChatHistory({
                       focus:outline-none
                       ${
 												isActive
-													? "bg-[#4ADE80]/10 border-l-2 border-[#4ADE80]"
+													? "bg-[#9EEA6C]/10 border-l-2 border-[#9EEA6C]"
 													: "hover:bg-white/5 border-l-2 border-transparent"
 											}
                     `}
@@ -84,7 +84,7 @@ export function ChatHistory({
 										<span
 											className={`
                         mt-0.5 shrink-0
-                        ${isActive ? "text-[#4ADE80]" : "text-vscode-fg/50"}
+                        ${isActive ? "text-[#9EEA6C]" : "text-vscode-fg/50"}
                       `}
 										>
 											<MessageSquare size={14} />
@@ -94,7 +94,7 @@ export function ChatHistory({
 											<p
 												className={`
                           text-sm font-medium truncate
-                          ${isActive ? "text-[#4ADE80]" : "text-vscode-fg"}
+                          ${isActive ? "text-[#9EEA6C]" : "text-vscode-fg"}
                         `}
 											>
 												{conversation.title}

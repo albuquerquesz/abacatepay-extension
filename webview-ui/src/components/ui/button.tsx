@@ -13,7 +13,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
 	primary:
-		"bg-[#4ADE80] text-black hover:bg-[#22C55E] active:bg-[#16A34A] disabled:bg-[#4ADE80]/50",
+		"bg-[#9EEA6C] text-black hover:bg-[#8BD85A] active:bg-[#7ACC4A] disabled:bg-[#9EEA6C]/50",
 	secondary:
 		"bg-vscode-button-bg text-vscode-button-fg hover:bg-vscode-button-hover disabled:opacity-50",
 	ghost:
@@ -43,7 +43,7 @@ export function Button({
         inline-flex items-center justify-center
         font-medium
         transition-colors duration-150 ease-in-out
-        focus:outline-none focus:ring-2 focus:ring-[#4ADE80]/50 focus:ring-offset-1 focus:ring-offset-transparent
+        focus:outline-none focus:ring-2 focus:ring-[#9EEA6C]/50 focus:ring-offset-1 focus:ring-offset-transparent
         disabled:cursor-not-allowed
         ${variantClasses[variant]}
         ${sizeClasses[size]}

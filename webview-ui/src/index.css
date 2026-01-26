@@ -12,10 +12,10 @@
   --color-vscode-card-bg: var(--vscode-sideBar-background);
   --color-vscode-border: var(--vscode-widget-border);
 
-  --color-abacate-primary: #4ade80;
-  --color-abacate-secondary: #22c55e;
-  --color-abacate-light: #86efac;
-  --color-abacate-dark: #166534;
+  --color-abacate-primary: #9EEA6C;
+  --color-abacate-secondary: #8BD85A;
+  --color-abacate-light: #B5F094;
+  --color-abacate-dark: #5A8F3E;
 
   --color-vscode-overlay: rgba(0, 0, 0, 0.5);
   --color-vscode-subtle-border: var(--vscode-widget-border, rgba(255, 255, 255, 0.1));
@@ -27,7 +27,7 @@
 @custom-variant vsc-light (&:where(.vscode-light, .vscode-light *));
 
 body.vscode-light {
-  --color-abacate-primary: #16a34a;
+  --color-abacate-primary: #7ACC4A;
   --color-vscode-overlay: rgba(0, 0, 0, 0.3);
   --color-vscode-subtle-border: var(--vscode-widget-border, rgba(0, 0, 0, 0.1));
 }

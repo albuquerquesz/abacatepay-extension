@@ -91,8 +91,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           transition-colors duration-150
           placeholder:text-vscode-fg/50
           focus:outline-none
-          focus:ring-2 focus:ring-[#4ADE80]/50
-          focus:border-[#4ADE80]
+          focus:ring-2 focus:ring-[#9EEA6C]/50
+          focus:border-[#9EEA6C]
           disabled:opacity-50 disabled:cursor-not-allowed
           ${className}
         `}
