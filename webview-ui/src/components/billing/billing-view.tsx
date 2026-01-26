@@ -1,26 +1,23 @@
-import { QrCode, CreditCard, ReceiptText } from "lucide-react";
+import { ReceiptText } from "lucide-react";
 
 interface MenuItemProps {
-  icon: React.ReactNode;
   label: string;
   description: string;
   onClick: () => void;
 }
 
-function MenuItem({ icon, label, description, onClick }: MenuItemProps) {
+function MenuItem({ label, description, onClick }: MenuItemProps) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="w-full flex items-center gap-4 p-4 rounded-xl bg-black/30 hover:bg-abacate-primary/10 border border-white/5 hover:border-abacate-primary/30 transition-all cursor-pointer text-left group"
+      className="w-full flex flex-col gap-1 p-4 rounded-xl transition-all cursor-pointer text-left group
+        vsc-dark:bg-black/30 vsc-dark:border-white/5 
+        vsc-light:bg-black/5 vsc-light:border-black/5
+        hover:bg-abacate-primary/10 hover:border-abacate-primary/30"
     >
-      <div className="text-vscode-fg/70 group-hover:text-abacate-primary transition-colors">
-        {icon}
-      </div>
-      <div>
-        <h3 className="text-sm font-semibold text-vscode-fg group-hover:text-abacate-primary transition-colors">{label}</h3>
-        <p className="text-xs text-vscode-fg/50 line-clamp-1">{description}</p>
-      </div>
+      <h3 className="text-sm font-semibold text-vscode-fg group-hover:text-abacate-primary transition-colors">{label}</h3>
+      <p className="text-xs text-vscode-fg/50 line-clamp-1">{description}</p>
     </button>
   );
 }
@@ -48,13 +45,11 @@ export function BillingView() {
 
       <div className="space-y-3">
         <MenuItem
-          icon={<QrCode size={22} strokeWidth={1.5} />}
           label="Criar Pix QRCode"
           description="Gere um QRCode estático ou dinâmico para Pix"
           onClick={handleCreatePixQRCode}
         />
         <MenuItem
-          icon={<CreditCard size={22} strokeWidth={1.5} />}
           label="Criar Checkout"
           description="Página de pagamento segura e otimizada"
           onClick={handleCreateCheckout}
