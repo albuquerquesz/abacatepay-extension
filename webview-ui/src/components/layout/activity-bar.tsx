@@ -1,5 +1,5 @@
+import { CreditCard, MessageSquare, Webhook } from "lucide-react";
 import type { ViewType } from "../../types/navigation";
-import { MessageSquare, CreditCard, Webhook } from "lucide-react";
 
 interface ActivityBarProps {
 	activeView: ViewType;
@@ -50,7 +50,7 @@ const navItems: { id: ViewType; icon: React.ReactNode; label: string }[] = [
 
 export function ActivityBar({ activeView, onViewChange }: ActivityBarProps) {
 	return (
-		<nav className="w-12 h-full bg-vscode-card-bg border-r border-white/5 flex flex-col shrink-0">
+		<nav className="w-12 h-full bg-vscode-card-bg border-r border-vscode-subtle-border flex flex-col shrink-0">
 			{navItems.map((item) => (
 				<ActivityBarItem
 					key={item.id}

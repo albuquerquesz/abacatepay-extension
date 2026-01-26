@@ -21,7 +21,7 @@ export function Sidebar({
 	onSelectConversation,
 }: SidebarProps) {
 	return (
-		<aside className="w-32 h-full bg-vscode-card-bg border-r border-white/5 flex flex-col shrink-0 overflow-hidden">
+		<aside className="w-32 h-full bg-vscode-card-bg border-r border-vscode-subtle-border flex flex-col shrink-0 overflow-hidden">
 			<div className="p-2">
 				<button
 					type="button"
