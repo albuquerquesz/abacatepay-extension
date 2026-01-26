@@ -36,7 +36,6 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
 					</div>
 				</div>
 
-				{/* Login Section */}
 				<div className="w-full flex flex-col gap-4">
 					<Button
 						variant="ghost"

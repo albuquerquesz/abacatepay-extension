@@ -7,6 +7,13 @@ interface SidebarProps {
 	onSelectConversation: (id: string) => void;
 }
 
+const MAX_TITLE_LENGTH = 12;
+
+function truncateTitle(title: string): string {
+	if (title.length <= MAX_TITLE_LENGTH) return title;
+	return `${title.slice(0, MAX_TITLE_LENGTH)}...`;
+}
+
 export function Sidebar({
 	conversations,
 	activeConversationId,
@@ -14,31 +21,33 @@ export function Sidebar({
 	onSelectConversation,
 }: SidebarProps) {
 	return (
-		<aside className="w-48 h-full bg-vscode-card-bg border-r border-white/5 flex flex-col shrink-0 overflow-hidden">
-			<div className="p-2">
+		<aside className="w-32 h-full bg-vscode-card-bg border-r border-white/5 flex flex-col shrink-0 overflow-hidden">
+			<div className="p-2 flex justify-center">
 				<button
 					type="button"
 					onClick={onNewConversation}
-					className="w-full py-2 px-3 text-xs bg-abacate-primary hover:bg-abacate-secondary text-abacate-dark font-medium rounded transition-colors cursor-pointer"
+					title="Nova conversa"
+					className="w-7 h-7 flex items-center justify-center text-sm bg-abacate-primary hover:bg-abacate-secondary text-abacate-dark font-bold rounded transition-colors cursor-pointer"
 				>
-					+ Nova conversa
+					+
 				</button>
 			</div>
 
-			<div className="flex-1 overflow-y-auto p-2 pt-0">
+			<div className="flex-1 overflow-y-auto px-1.5 pb-2">
 				{conversations.length === 0 ? (
-					<p className="text-xs text-vscode-fg/50 text-center py-4">
-						Nenhuma conversa
+					<p className="text-[10px] text-vscode-fg/50 text-center py-3">
+						Sem conversas
 					</p>
 				) : (
-					<ul className="space-y-1">
+					<ul className="space-y-0.5">
 						{conversations.map((conversation) => (
 							<li key={conversation.id}>
 								<button
 									type="button"
 									onClick={() => onSelectConversation(conversation.id)}
+									title={conversation.title}
 									className={`
-										w-full text-left px-2 py-1.5 text-xs rounded transition-colors cursor-pointer truncate
+										w-full text-left px-1.5 py-1 text-[11px] rounded transition-colors cursor-pointer
 										${
 											activeConversationId === conversation.id
 												? "bg-abacate-primary/20 text-abacate-primary"
@@ -46,7 +55,7 @@ export function Sidebar({
 										}
 									`}
 								>
-									{conversation.title}
+									{truncateTitle(conversation.title)}
 								</button>
 							</li>
 						))}

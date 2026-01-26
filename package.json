@@ -36,6 +36,21 @@
           "name": "AbacatePay"
         }
       ]
+    },
+    "configuration": {
+      "title": "AbacatePay",
+      "properties": {
+        "abacatepay.cliPath": {
+          "type": "string",
+          "default": "abacate",
+          "description": "Caminho para o executável da CLI do AbacatePay."
+        },
+        "abacatepay.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "API Key do AbacatePay (preenchida automaticamente após o login)."
+        }
+      }
     }
   },
   "scripts": {
