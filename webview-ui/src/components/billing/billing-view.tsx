@@ -4,7 +4,7 @@ import { api } from "../../services/bridge-api";
 import { vscode } from "../../utils/vscode";
 import { Button, Input, MenuList, type MenuOption, ViewLayout } from "../ui";
 
-type BillingViewState = "main" | "pix-setup" | "pix-manual";
+type BillingViewState = "main" | "pix-setup" | "pix-manual" | "checkout-setup" | "checkout-manual";
 
 export function BillingView() {
 	const [view, setView] = useState<BillingViewState>("main");
@@ -35,36 +35,50 @@ export function BillingView() {
 		});
 	};
 
+	const handleManualCheckout = () => {
+		setView("checkout-manual");
+	};
+
+	const handleRandomCheckout = () => {
+		console.log("Random Checkout selected");
+		vscode.postMessage({
+			command: "run-terminal",
+			payload: {
+				command: "abacate create checkout",
+			},
+		});
+	};
+
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setIsLoading(true);
 
+		const isCheckout = view === "checkout-manual";
+		const endpoint = isCheckout ? "/billing/create" : "/pixQrCode/create";
+
 		try {
-			const result = await api.post("/pixQrCode/create", {
+			const result = await api.post(endpoint, {
 				amount: Number(formData.amount),
 				description: formData.description,
-				expiresIn: 3600, // 1 hora por padrão
+				methods: isCheckout ? ["PIX", "CREDIT_CARD"] : ["PIX"],
 				customer: {
 					name: formData.customerName,
 					email: formData.customerEmail,
 					taxId: formData.customerTaxId,
 				},
-				metadata: {
-					externalId: `ext_${Date.now()}`,
-				},
 			});
 
-			console.log("Pix gerado com sucesso:", result);
+			console.log(`${isCheckout ? "Checkout" : "Pix"} gerado com sucesso:`, result);
 			vscode.postMessage({
 				command: "showInfo",
-				data: "Cobrança Pix gerada com sucesso!",
+				data: `${isCheckout ? "Checkout" : "Cobrança Pix"} gerada com sucesso!`,
 			});
 			setView("main");
 		} catch (error: any) {
-			console.error("Erro ao gerar Pix:", error);
+			console.error(`Erro ao gerar ${isCheckout ? "Checkout" : "Pix"}:`, error);
 			vscode.postMessage({
 				command: "showError",
-				data: `Erro ao gerar Pix: ${error.message}`,
+				data: `Erro ao gerar ${isCheckout ? "Checkout" : "Pix"}: ${error.message}`,
 			});
 		} finally {
 			setIsLoading(false);
@@ -80,7 +94,7 @@ export function BillingView() {
 		{
 			label: "Criar Checkout",
 			description: "Página de pagamento segura e otimizada",
-			onClick: handleCreateCheckout,
+			onClick: () => setView("checkout-setup"),
 		},
 	];
 
@@ -97,12 +111,26 @@ export function BillingView() {
 		},
 	];
 
-	if (view === "pix-manual") {
+	const checkoutOptions: MenuOption[] = [
+		{
+			label: "Preenchimento Manual",
+			description: "Defina os detalhes do produto e cliente",
+			onClick: handleManualCheckout,
+		},
+		{
+			label: "Gerar com Dados Aleatórios",
+			description: "Crie um Checkout instantâneo para fins de teste",
+			onClick: handleRandomCheckout,
+		},
+	];
+
+	if (view === "pix-manual" || view === "checkout-manual") {
+		const isCheckout = view === "checkout-manual";
 		return (
 			<ViewLayout
-				title="Novo Pix"
+				title={isCheckout ? "Novo Checkout" : "Novo Pix"}
 				description="Preencha os dados da cobrança"
-				onBack={() => setView("pix-setup")}
+				onBack={() => setView(isCheckout ? "checkout-setup" : "pix-setup")}
 			>
 				<form className="space-y-4 pb-8" onSubmit={handleSubmit}>
 					<div className="space-y-2">
@@ -167,7 +195,7 @@ export function BillingView() {
 						/>
 					</div>
 					<Button type="submit" className="w-full mt-4" disabled={isLoading}>
-						{isLoading ? "Gerando..." : "Gerar Cobrança Pix"}
+						{isLoading ? "Gerando..." : `Gerar ${isCheckout ? "Checkout" : "Cobrança Pix"}`}
 					</Button>
 				</form>
 			</ViewLayout>
@@ -182,6 +210,18 @@ export function BillingView() {
 				onBack={() => setView("main")}
 			>
 				<MenuList options={pixOptions} />
+			</ViewLayout>
+		);
+	}
+
+	if (view === "checkout-setup") {
+		return (
+			<ViewLayout
+				title="Criar Checkout"
+				description="Como deseja gerar o pagamento?"
+				onBack={() => setView("main")}
+			>
+				<MenuList options={checkoutOptions} />
 			</ViewLayout>
 		);
 	}
