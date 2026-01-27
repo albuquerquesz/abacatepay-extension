@@ -115,7 +115,7 @@ export function ChatContainer() {
                 className={`
 									max-w-[85%] px-3 py-2 rounded-lg text-sm
 									${message.role === "user"
-                    ? "bg-[#9EEA6C] text-black"
+                    ? "bg-abacate-primary text-black"
                     : "bg-vscode-message-bg text-vscode-fg"
                   }
 								`}
@@ -128,20 +128,20 @@ export function ChatContainer() {
 
         {isLoading && (
           <div className="flex justify-start items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-[#9EEA6C]/20 flex items-center justify-center">
+            <div className="w-6 h-6 rounded-full bg-abacate-primary/20 flex items-center justify-center">
               <span className="text-sm">🥑</span>
             </div>
             <div className="flex items-center gap-1 px-3 py-2">
-              <span className="w-2 h-2 bg-[#9EEA6C] rounded-full typing-dot" />
-              <span className="w-2 h-2 bg-[#9EEA6C] rounded-full typing-dot" />
-              <span className="w-2 h-2 bg-[#9EEA6C] rounded-full typing-dot" />
+              <span className="w-2 h-2 bg-abacate-primary rounded-full typing-dot" />
+              <span className="w-2 h-2 bg-abacate-primary rounded-full typing-dot" />
+              <span className="w-2 h-2 bg-abacate-primary rounded-full typing-dot" />
             </div>
           </div>
         )}
       </div>
 
       <div className="p-3">
-        <div className="flex items-end gap-2 bg-vscode-input-bg rounded-lg p-3 border-l border-vscode-subtle-border focus-within:border-[#9EEA6C] transition-colors">
+        <div className="flex items-end gap-2 bg-vscode-input-bg rounded-lg p-3 border-l border-vscode-subtle-border focus-within:border-abacate-primary transition-colors">
           <textarea
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
@@ -161,7 +161,7 @@ export function ChatContainer() {
             type="button"
             onClick={handleSendMessage}
             disabled={!inputValue.trim() || isLoading}
-            className="p-1.5 rounded-md bg-[#9EEA6C] text-black disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-opacity flex items-center justify-center"
+            className="p-1.5 rounded-md bg-abacate-primary text-black disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-opacity flex items-center justify-center"
             aria-label="Enviar"
           >
             <ArrowUp size={16} strokeWidth={3} />
@@ -177,14 +177,13 @@ export function ChatContainer() {
         return <BillingView />;
       case "webhooks":
         return <WebhooksView />;
-      case "chat":
       default:
         return renderChatView();
     }
   };
 
   return (
-    <div className="flex h-screen bg-vscode-bg">
+    <div className="flex h-screen bg-vscode-bg border-r border-vscode-subtle-border">
       <ActivityBar activeView={activeView} onViewChange={handleViewChange} />
 
       {activeView === "chat" && (

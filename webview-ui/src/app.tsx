@@ -22,7 +22,7 @@ function App() {
 
 	if (isAuthenticated === null) {
 		return (
-			<div className="flex items-center justify-center h-screen bg-vscode-bg">
+			<div className="flex items-center justify-center h-screen bg-vscode-bg border-r border-vscode-subtle-border">
 				<div className="animate-pulse text-abacate-primary font-bold">
 					🥑 Carregando...
 				</div>
@@ -38,4 +38,3 @@ function App() {
 }
 
 export default App;
-

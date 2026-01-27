@@ -31,28 +31,39 @@ export function WebhooksView() {
     console.log("Listar Webhooks");
   };
 
+  const options = [
+    {
+      label: "Criar Webhook",
+      description: "Configure um novo endpoint de notificação",
+      onClick: handleCreateWebhook,
+    },
+    {
+      label: "Listar Webhooks",
+      description: "Visualize e gerencie seus webhooks ativos",
+      onClick: handleListWebhooks,
+    },
+  ];
+
   return (
     <div className="flex flex-col h-full bg-vscode-bg text-vscode-fg p-5">
       <div className="mb-6">
-        <h1 className="text-xl font-bold text-abacate-primary flex items-center gap-2">
+        <h1 className="text-xl font-bold text-vscode-fg flex items-center gap-2">
           Webhooks
         </h1>
-        <p className="text-xs text-vscode-fg/50 mt-1 ml-8">
+        <p className="text-xs text-vscode-fg/50 mt-1">
           Configure seus endpoints de notificação
         </p>
       </div>
 
       <div className="space-y-3">
-        <MenuItem
-          label="Criar Webhook"
-          description="Configure um novo endpoint de notificação"
-          onClick={handleCreateWebhook}
-        />
-        <MenuItem
-          label="Listar Webhooks"
-          description="Visualize e gerencie seus webhooks ativos"
-          onClick={handleListWebhooks}
-        />
+        {options.map((o) => (
+          <MenuItem
+            key={o.label}
+            label={o.label}
+            description={o.description}
+            onClick={o.onClick}
+          />
+        ))}
       </div>
     </div>
   );
