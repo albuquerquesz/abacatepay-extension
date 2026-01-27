@@ -72,6 +72,12 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 					vscode.window.showErrorMessage(data.data);
 					break;
 				}
+				case "run-terminal": {
+					const terminal = vscode.window.createTerminal("AbacatePay Webhooks");
+					terminal.show();
+					terminal.sendText(data.payload.command);
+					break;
+				}
 			}
 		});
 	}

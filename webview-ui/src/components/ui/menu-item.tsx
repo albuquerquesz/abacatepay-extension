@@ -21,7 +21,7 @@ export function MenuItem({
 			onClick={onClick}
 			disabled={disabled}
 			className="w-full flex flex-col gap-1 p-4 rounded-xl transition-all cursor-pointer text-left group
-        vsc-dark:bg-black/40 vsc-dark:border-white/5
+        vsc-dark:bg-white/5 vsc-dark:border-white/10
         vsc-light:bg-vscode-input-bg vsc-light:border-vscode-input-border
         hover:bg-abacate-primary/10 hover:border-abacate-primary/30
         disabled:opacity-50 disabled:cursor-not-allowed"
