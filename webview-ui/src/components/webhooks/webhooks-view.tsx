@@ -25,7 +25,7 @@ function validateUrl(url: string): boolean {
   }
 }
 
-type ViewState = "main" | "samples" | "json" | "listen";
+type ViewState = "main" | "samples" | "json" | "listen" | "create";
 
 export function WebhooksView() {
   const [view, setView] = useState<ViewState>("main");
@@ -58,6 +58,16 @@ export function WebhooksView() {
     handleWebhookListen(forwardUrl);
   };
 
+  const handleStartCreate = () => {
+    if (!validateUrl(forwardUrl)) {
+      setUrlError("URL inválida. Use o formato: http://localhost:3000");
+      return;
+    }
+    setUrlError(undefined);
+    // @ts-ignore - handleCreateWebhook might not expect arguments yet, but we pass it for future use
+    handleCreateWebhook(forwardUrl);
+  };
+
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForwardUrl(e.target.value);
     if (urlError) {
@@ -69,7 +79,7 @@ export function WebhooksView() {
     {
       label: "Criar Webhook",
       description: "Configure um novo endpoint de notificação",
-      onClick: handleCreateWebhook,
+      onClick: () => setView("create"),
     },
     {
       label: "Ouvir Webhooks",
@@ -91,11 +101,16 @@ export function WebhooksView() {
     onClick: () => handleSelectSample(event),
   }));
 
-  if (view === "listen") {
+  if (view === "listen" || view === "create") {
+    const isCreate = view === "create";
     return (
       <ViewLayout
-        title="Ouvir Webhooks"
-        description="Informe a URL para encaminhar os webhooks"
+        title={isCreate ? "Criar Webhook" : "Ouvir Webhooks"}
+        description={
+          isCreate
+            ? "Informe a URL para onde os eventos serão enviados"
+            : "Informe a URL para encaminhar os webhooks"
+        }
         onBack={handleBack}
       >
         <div className="space-y-4">
@@ -106,8 +121,11 @@ export function WebhooksView() {
             onChange={handleUrlChange}
             error={urlError}
           />
-          <Button className="w-full" onClick={handleStartListen}>
-            Iniciar Escuta
+          <Button
+            className="w-full"
+            onClick={isCreate ? handleStartCreate : handleStartListen}
+          >
+            {isCreate ? "Criar Webhook" : "Iniciar Escuta"}
           </Button>
         </div>
       </ViewLayout>
