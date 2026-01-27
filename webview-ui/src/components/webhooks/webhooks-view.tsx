@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { Button } from "../ui/button";
+
 interface MenuItemProps {
   label: string;
   description: string;
@@ -22,7 +25,51 @@ function MenuItem({ label, description, onClick }: MenuItemProps) {
   );
 }
 
+const SAMPLE_EVENTS = {
+  "billing.paid": {
+    event: "billing.paid",
+    data: {
+      id: "bill_123456789",
+      status: "paid",
+      amount: 2990,
+      customer: {
+        name: "John Doe",
+        email: "john@example.com",
+      },
+    },
+  },
+  "payouts.done": {
+    event: "payouts.done",
+    data: {
+      id: "pay_123456789",
+      status: "done",
+      amount: 5000,
+      bankAccount: {
+        bank: "001",
+        branch: "1234",
+        account: "12345-6",
+      },
+    },
+  },
+  "payouts.failed": {
+    event: "payouts.failed",
+    data: {
+      id: "pay_987654321",
+      status: "failed",
+      amount: 5000,
+      failureReason: "invalid_account",
+    },
+  },
+};
+
+type SampleEventType = keyof typeof SAMPLE_EVENTS;
+
 export function WebhooksView() {
+  const [view, setView] = useState<"main" | "samples" | "json">("main");
+  const [selectedEvent, setSelectedEvent] = useState<SampleEventType | null>(
+    null
+  );
+
   const handleCreateWebhook = () => {
     console.log("Criar Webhook");
   };
@@ -33,6 +80,23 @@ export function WebhooksView() {
 
   const handleWebhookListen = () => {
     console.log("Escutar Webhooks");
+  };
+
+  const handleShowSamples = () => {
+    setView("samples");
+  };
+
+  const handleSelectSample = (event: SampleEventType) => {
+    setSelectedEvent(event);
+    setView("json");
+  };
+
+  const handleBack = () => {
+    if (view === "json") {
+      setView("samples");
+    } else {
+      setView("main");
+    }
   };
 
   const options = [
@@ -51,7 +115,61 @@ export function WebhooksView() {
       description: "Ouça webhooks e encaminhe para seu app local",
       onClick: handleWebhookListen,
     },
+    {
+      label: "Exemplos de JSON",
+      description: "Visualize payloads de eventos suportados",
+      onClick: handleShowSamples,
+    },
   ];
+
+  if (view === "samples") {
+    return (
+      <div className="flex flex-col h-full bg-vscode-bg text-vscode-fg p-5">
+        <div className="mb-6">
+          <Button variant="ghost" onClick={handleBack} className="mb-2 -ml-2">
+            ← Voltar
+          </Button>
+          <h1 className="text-xl font-bold text-vscode-fg">Exemplos de JSON</h1>
+          <p className="text-xs text-vscode-fg/50 mt-1">
+            Selecione um evento para visualizar o payload
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          {(Object.keys(SAMPLE_EVENTS) as SampleEventType[]).map((event) => (
+            <MenuItem
+              key={event}
+              label={event}
+              description={`Exemplo de payload para ${event}`}
+              onClick={() => handleSelectSample(event)}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (view === "json" && selectedEvent) {
+    return (
+      <div className="flex flex-col h-full bg-vscode-bg text-vscode-fg p-5">
+        <div className="mb-6">
+          <Button variant="ghost" onClick={handleBack} className="mb-2 -ml-2">
+            ← Voltar
+          </Button>
+          <h1 className="text-xl font-bold text-vscode-fg">{selectedEvent}</h1>
+          <p className="text-xs text-vscode-fg/50 mt-1">
+            Exemplo de payload JSON
+          </p>
+        </div>
+
+        <div className="bg-vscode-input-bg p-4 rounded-xl border border-vscode-input-border overflow-x-auto">
+          <pre className="text-xs font-mono text-vscode-fg">
+            {JSON.stringify(SAMPLE_EVENTS[selectedEvent], null, 2)}
+          </pre>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-full bg-vscode-bg text-vscode-fg p-5">
