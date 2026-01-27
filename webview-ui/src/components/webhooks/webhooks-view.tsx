@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   handleCreateWebhook,
+  handleResendEvent,
   handleWebhookListen,
 } from "../../functions/webhook-handlers";
 import {
@@ -25,7 +26,7 @@ function validateUrl(url: string): boolean {
   }
 }
 
-type ViewState = "main" | "samples" | "json" | "listen" | "create" | "history";
+type ViewState = "main" | "samples" | "json" | "listen" | "create" | "history" | "resend";
 
 interface ViewData {
   title: string;
@@ -60,7 +61,7 @@ export function WebhooksView() {
   const [lastView, setLastView] = useState<ViewState>("main");
   const [viewData, setViewData] = useState<ViewData | null>(null);
   
-  const [forwardUrl, setForwardUrl] = useState("http://localhost:3000");
+  const [inputValue, setInputValue] = useState("");
   const [urlError, setUrlError] = useState<string | undefined>();
 
   const handleSelectSample = (event: SampleEventType) => {
@@ -93,26 +94,35 @@ export function WebhooksView() {
   };
 
   const handleStartListen = () => {
-    if (!validateUrl(forwardUrl)) {
+    if (!validateUrl(inputValue)) {
       setUrlError("URL inválida. Use o formato: http://localhost:3000");
       return;
     }
     setUrlError(undefined);
-    handleWebhookListen(forwardUrl);
+    handleWebhookListen(inputValue);
   };
 
   const handleStartCreate = () => {
-    if (!validateUrl(forwardUrl)) {
+    if (!validateUrl(inputValue)) {
       setUrlError("URL inválida. Use o formato: http://localhost:3000");
       return;
     }
     setUrlError(undefined);
     // @ts-ignore
-    handleCreateWebhook(forwardUrl);
+    handleCreateWebhook(inputValue);
   };
 
-  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForwardUrl(e.target.value);
+  const handleDoResend = () => {
+    if (!inputValue.trim()) {
+      setUrlError("O ID do evento é obrigatório");
+      return;
+    }
+    setUrlError(undefined);
+    handleResendEvent(inputValue);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
     if (urlError) {
       setUrlError(undefined);
     }
@@ -122,12 +132,26 @@ export function WebhooksView() {
     {
       label: "Criar Webhook",
       description: "Configure um novo endpoint de notificação",
-      onClick: () => setView("create"),
+      onClick: () => {
+        setInputValue("http://localhost:3000");
+        setView("create");
+      },
     },
     {
       label: "Ouvir Webhooks",
       description: "Ouça webhooks e encaminhe para seu app local",
-      onClick: () => setView("listen"),
+      onClick: () => {
+        setInputValue("http://localhost:3000");
+        setView("listen");
+      },
+    },
+    {
+      label: "Reenviar Evento",
+      description: "Reenvie um evento passado para seu endpoint local",
+      onClick: () => {
+        setInputValue("");
+        setView("resend");
+      },
     },
     {
       label: "Histórico de Eventos",
@@ -155,31 +179,48 @@ export function WebhooksView() {
     onClick: () => handleSelectHistoryItem(item),
   }));
 
-  if (view === "listen" || view === "create") {
+  if (view === "listen" || view === "create" || view === "resend") {
     const isCreate = view === "create";
+    const isResend = view === "resend";
+    
+    let title = "Ouvir Webhooks";
+    let description = "Informe a URL para encaminhar os webhooks";
+    let buttonText = "Iniciar Escuta";
+    let placeholder = "http://localhost:3000";
+    let action = handleStartListen;
+
+    if (isCreate) {
+      title = "Criar Webhook";
+      description = "Informe a URL para onde os eventos serão enviados";
+      buttonText = "Criar Webhook";
+      action = handleStartCreate;
+    } else if (isResend) {
+      title = "Reenviar Evento";
+      description = "Informe o ID do evento para reenvio local";
+      buttonText = "Reenviar Evento";
+      placeholder = "evt_...";
+      action = handleDoResend;
+    }
+
     return (
       <ViewLayout
-        title={isCreate ? "Criar Webhook" : "Ouvir Webhooks"}
-        description={
-          isCreate
-            ? "Informe a URL para onde os eventos serão enviados"
-            : "Informe a URL para encaminhar os webhooks"
-        }
+        title={title}
+        description={description}
         onBack={handleBack}
       >
         <div className="space-y-4">
           <Input
-            type="url"
-            placeholder="http://localhost:3000"
-            value={forwardUrl}
-            onChange={handleUrlChange}
+            type={isResend ? "text" : "url"}
+            placeholder={placeholder}
+            value={inputValue}
+            onChange={handleInputChange}
             error={urlError}
           />
           <Button
             className="w-full"
-            onClick={isCreate ? handleStartCreate : handleStartListen}
+            onClick={action}
           >
-            {isCreate ? "Criar Webhook" : "Iniciar Escuta"}
+            {buttonText}
           </Button>
         </div>
       </ViewLayout>

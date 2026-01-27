@@ -10,10 +10,10 @@ export function handleListWebhooks() {
 	console.log("Listar Webhooks");
 }
 
-export function handleWebhookListen(forwardUrl: string) {
-	vscode.postMessage({
-		command: "run-terminal",
-		payload: { command: "ls" },
-	});
-	console.log("Webhook listener iniciado para:", forwardUrl);
+export function handleWebhookListen(url: string) {
+	console.log("Escutar Webhooks em:", url);
+}
+
+export function handleResendEvent(eventId: string) {
+	console.log("Reenviando evento:", eventId);
 }
