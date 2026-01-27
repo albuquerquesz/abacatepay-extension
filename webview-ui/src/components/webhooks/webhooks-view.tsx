@@ -56,6 +56,42 @@ const MOCK_HISTORY = [
   },
 ];
 
+function HistoryItem({ 
+  item, 
+  onClick 
+}: { 
+  item: typeof MOCK_HISTORY[0]; 
+  onClick: () => void 
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="w-full flex flex-col gap-2 p-4 rounded-xl transition-all cursor-pointer text-left group
+        vsc-dark:bg-white/5 vsc-dark:border-white/10
+        vsc-light:bg-vscode-input-bg vsc-light:border-vscode-input-border
+        hover:bg-abacate-primary/10 hover:border-abacate-primary/30"
+    >
+      <div className="flex justify-between items-start w-full">
+        <h3 className="text-sm font-bold text-vscode-fg group-hover:text-abacate-primary transition-colors">
+          {item.type}
+        </h3>
+        <span className="text-[10px] opacity-50 font-mono uppercase tracking-wider">
+          {item.id}
+        </span>
+      </div>
+      <div className="flex justify-between items-center w-full">
+        <p className="text-xs text-vscode-fg/50 font-mono">
+          {new Date(item.timestamp).toLocaleString()}
+        </p>
+        <span className="text-[10px] text-abacate-primary opacity-0 group-hover:opacity-100 transition-opacity font-bold">
+          VER DETALHES →
+        </span>
+      </div>
+    </button>
+  );
+}
+
 export function WebhooksView() {
   const [view, setView] = useState<ViewState>("main");
   const [lastView, setLastView] = useState<ViewState>("main");
@@ -173,12 +209,6 @@ export function WebhooksView() {
     onClick: () => handleSelectSample(event),
   }));
 
-  const historyOptions: MenuOption[] = MOCK_HISTORY.map((item) => ({
-    label: item.type,
-    description: new Date(item.timestamp).toLocaleString(),
-    onClick: () => handleSelectHistoryItem(item),
-  }));
-
   if (view === "listen" || view === "create" || view === "resend") {
     const isCreate = view === "create";
     const isResend = view === "resend";
@@ -246,7 +276,15 @@ export function WebhooksView() {
         description="Últimos eventos processados"
         onBack={handleBack}
       >
-        <MenuList options={historyOptions} />
+        <div className="space-y-3">
+          {MOCK_HISTORY.map((item) => (
+            <HistoryItem
+              key={item.id}
+              item={item}
+              onClick={() => handleSelectHistoryItem(item)}
+            />
+          ))}
+        </div>
       </ViewLayout>
     );
   }
