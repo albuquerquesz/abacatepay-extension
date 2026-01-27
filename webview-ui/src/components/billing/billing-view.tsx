@@ -3,6 +3,7 @@ import {
 	handleCreateCheckout,
 	handleCreatePixQRCode,
 } from "../../functions/billing-handlers";
+import { vscode } from "../../utils/vscode";
 import { Button, Input, MenuList, type MenuOption, ViewLayout } from "../ui";
 
 type BillingViewState = "main" | "pix-setup" | "pix-manual";
@@ -27,7 +28,12 @@ export function BillingView() {
 
 	const handleRandomPix = () => {
 		console.log("Random Pix selected");
-		handleCreatePixQRCode();
+		vscode.postMessage({
+			command: "run-terminal",
+			payload: {
+				command: "abacate create pix",
+			},
+		});
 	};
 
 	const handleSubmit = (e: React.FormEvent) => {
