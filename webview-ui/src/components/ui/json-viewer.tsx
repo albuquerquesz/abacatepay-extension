@@ -16,7 +16,7 @@ export function JsonViewer({ data, className = "" }: JsonViewerProps) {
 
   return (
     <div
-      className={`rounded-xl border border-vscode-input-border overflow-hidden bg-vscode-bg ${className}`}
+      className={`rounded-xl border vsc-dark:border-white/5 vsc-light:border-vscode-input-border overflow-hidden bg-vscode-bg ${className}`}
     >
       <SyntaxHighlighter
         language="json"
@@ -27,6 +27,8 @@ export function JsonViewer({ data, className = "" }: JsonViewerProps) {
           fontSize: "0.75rem",
           lineHeight: "1.5",
           background: "transparent",
+          border: "none",
+          boxShadow: "none",
         }}
         codeTagProps={{
           style: {
