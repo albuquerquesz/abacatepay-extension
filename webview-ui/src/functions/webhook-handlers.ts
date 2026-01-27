@@ -1,3 +1,5 @@
+import { vscode } from "../utils/vscode";
+
 // TODO: Implementar integração com API AbacatePay
 
 export function handleCreateWebhook() {
@@ -9,7 +11,12 @@ export function handleListWebhooks() {
 }
 
 export function handleWebhookListen(url: string) {
-  console.log("Escutar Webhooks em:", url);
+  vscode.postMessage({
+    command: "run-terminal",
+    payload: {
+      command: `abacate listen --forward-to ${url}`,
+    },
+  });
 }
 
 export function handleResendEvent(eventId: string) {

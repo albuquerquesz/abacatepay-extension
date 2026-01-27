@@ -98,7 +98,7 @@ export class Panel {
 
 	private _setWebviewMessageListener(webview: vscode.Webview) {
 		webview.onDidReceiveMessage(
-			async (message: { command: string; data?: unknown }) => {
+			async (message: any) => {
 				const { command, data } = message;
 
 				switch (command) {
@@ -123,6 +123,12 @@ export class Panel {
 					case "showInfo":
 						vscode.window.showInformationMessage(data as string);
 						break;
+					case "run-terminal": {
+						const terminal = vscode.window.createTerminal("AbacatePay Webhooks");
+						terminal.show();
+						terminal.sendText(message.payload.command);
+						break;
+					}
 					default:
 						break;
 				}
