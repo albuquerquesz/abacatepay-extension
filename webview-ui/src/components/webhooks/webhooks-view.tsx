@@ -22,10 +22,10 @@ export function WebhooksView() {
   };
 
   const handleBack = () => {
+    setView("main");
+
     if (view === "json") {
       setView("samples");
-    } else {
-      setView("main");
     }
   };
 
