@@ -25,27 +25,70 @@ function validateUrl(url: string): boolean {
   }
 }
 
-type ViewState = "main" | "samples" | "json" | "listen" | "create";
+type ViewState = "main" | "samples" | "json" | "listen" | "create" | "history";
+
+interface ViewData {
+  title: string;
+  description: string;
+  data: unknown;
+}
+
+// Mock history data using existing samples
+const MOCK_HISTORY = [
+  {
+    id: "evt_1",
+    type: "billing.paid",
+    timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(), // 5 min ago
+    payload: SAMPLE_EVENTS["billing.paid"],
+  },
+  {
+    id: "evt_2",
+    type: "payouts.done",
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2 hours ago
+    payload: SAMPLE_EVENTS["payouts.done"],
+  },
+  {
+    id: "evt_3",
+    type: "payouts.failed",
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), // 1 day ago
+    payload: SAMPLE_EVENTS["payouts.failed"],
+  },
+];
 
 export function WebhooksView() {
   const [view, setView] = useState<ViewState>("main");
-  const [selectedEvent, setSelectedEvent] = useState<SampleEventType | null>(
-    null,
-  );
+  const [lastView, setLastView] = useState<ViewState>("main");
+  const [viewData, setViewData] = useState<ViewData | null>(null);
+  
   const [forwardUrl, setForwardUrl] = useState("http://localhost:3000");
   const [urlError, setUrlError] = useState<string | undefined>();
 
   const handleSelectSample = (event: SampleEventType) => {
-    setSelectedEvent(event);
+    setViewData({
+      title: event,
+      description: "Exemplo de payload JSON",
+      data: SAMPLE_EVENTS[event],
+    });
+    setLastView("samples");
+    setView("json");
+  };
+
+  const handleSelectHistoryItem = (item: typeof MOCK_HISTORY[0]) => {
+    setViewData({
+      title: item.type,
+      description: `Recebido em ${new Date(item.timestamp).toLocaleString()}`,
+      data: item.payload,
+    });
+    setLastView("history");
     setView("json");
   };
 
   const handleBack = () => {
-    setView("main");
     if (view === "json") {
-      setView("samples");
+      setView(lastView);
+    } else {
+      setView("main");
     }
-
     setUrlError(undefined);
   };
 
@@ -64,7 +107,7 @@ export function WebhooksView() {
       return;
     }
     setUrlError(undefined);
-    // @ts-ignore - handleCreateWebhook might not expect arguments yet, but we pass it for future use
+    // @ts-ignore
     handleCreateWebhook(forwardUrl);
   };
 
@@ -87,6 +130,11 @@ export function WebhooksView() {
       onClick: () => setView("listen"),
     },
     {
+      label: "Histórico de Eventos",
+      description: "Visualize os últimos eventos recebidos",
+      onClick: () => setView("history"),
+    },
+    {
       label: "Exemplos de JSON",
       description: "Visualize payloads de eventos suportados",
       onClick: () => setView("samples"),
@@ -99,6 +147,12 @@ export function WebhooksView() {
     label: event,
     description: `Exemplo de payload para ${event}`,
     onClick: () => handleSelectSample(event),
+  }));
+
+  const historyOptions: MenuOption[] = MOCK_HISTORY.map((item) => ({
+    label: item.type,
+    description: new Date(item.timestamp).toLocaleString(),
+    onClick: () => handleSelectHistoryItem(item),
   }));
 
   if (view === "listen" || view === "create") {
@@ -144,14 +198,26 @@ export function WebhooksView() {
     );
   }
 
-  if (view === "json" && selectedEvent) {
+  if (view === "history") {
     return (
       <ViewLayout
-        title={selectedEvent}
-        description="Exemplo de payload JSON"
+        title="Histórico de Eventos"
+        description="Últimos eventos processados"
         onBack={handleBack}
       >
-        <JsonViewer data={SAMPLE_EVENTS[selectedEvent]} />
+        <MenuList options={historyOptions} />
+      </ViewLayout>
+    );
+  }
+
+  if (view === "json" && viewData) {
+    return (
+      <ViewLayout
+        title={viewData.title}
+        description={viewData.description}
+        onBack={handleBack}
+      >
+        <JsonViewer data={viewData.data} />
       </ViewLayout>
     );
   }
