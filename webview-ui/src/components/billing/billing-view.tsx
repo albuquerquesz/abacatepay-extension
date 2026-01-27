@@ -3,22 +3,36 @@ import {
 	handleCreateCheckout,
 	handleCreatePixQRCode,
 } from "../../functions/billing-handlers";
-import { MenuList, type MenuOption, ViewLayout } from "../ui";
+import { Button, Input, MenuList, type MenuOption, ViewLayout } from "../ui";
 
-type BillingViewState = "main" | "pix-setup";
+type BillingViewState = "main" | "pix-setup" | "pix-manual";
 
 export function BillingView() {
 	const [view, setView] = useState<BillingViewState>("main");
+	const [formData, setFormData] = useState({
+		amount: "",
+		description: "",
+		customerName: "",
+		customerEmail: "",
+		customerTaxId: "",
+	});
+
+	const handleInputChange = (field: keyof typeof formData, value: string) => {
+		setFormData((prev) => ({ ...prev, [field]: value }));
+	};
 
 	const handleManualPix = () => {
-		// TODO: Implementar tela de formulário manual no futuro
-		console.log("Manual Pix selected");
-		handleCreatePixQRCode();
+		setView("pix-manual");
 	};
 
 	const handleRandomPix = () => {
-		// TODO: Implementar geração aleatória no futuro
 		console.log("Random Pix selected");
+		handleCreatePixQRCode();
+	};
+
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		console.log("Gerando Pix com os dados:", formData);
 		handleCreatePixQRCode();
 	};
 
@@ -47,6 +61,83 @@ export function BillingView() {
 			onClick: handleRandomPix,
 		},
 	];
+
+	if (view === "pix-manual") {
+		return (
+			<ViewLayout
+				title="Novo Pix"
+				description="Preencha os dados da cobrança"
+				onBack={() => setView("pix-setup")}
+			>
+				<form className="space-y-4 pb-8" onSubmit={handleSubmit}>
+					<div className="space-y-2">
+						<label className="text-xs font-medium text-vscode-fg/70">
+							Valor (em centavos)
+						</label>
+						<Input
+							type="number"
+							placeholder="Ex: 1000 (para R$ 10,00)"
+							value={formData.amount}
+							onChange={(e) => handleInputChange("amount", e.target.value)}
+							required
+						/>
+					</div>
+					<div className="space-y-2">
+						<label className="text-xs font-medium text-vscode-fg/70">
+							Descrição do Produto
+						</label>
+						<Input
+							placeholder="Ex: Camiseta Algodão"
+							value={formData.description}
+							onChange={(e) => handleInputChange("description", e.target.value)}
+							required
+						/>
+					</div>
+					<div className="space-y-2">
+						<label className="text-xs font-medium text-vscode-fg/70">
+							Nome do Cliente
+						</label>
+						<Input
+							placeholder="Ex: João da Silva"
+							value={formData.customerName}
+							onChange={(e) => handleInputChange("customerName", e.target.value)}
+							required
+						/>
+					</div>
+					<div className="space-y-2">
+						<label className="text-xs font-medium text-vscode-fg/70">
+							E-mail do Cliente
+						</label>
+						<Input
+							type="email"
+							placeholder="joao@email.com"
+							value={formData.customerEmail}
+							onChange={(e) =>
+								handleInputChange("customerEmail", e.target.value)
+							}
+							required
+						/>
+					</div>
+					<div className="space-y-2">
+						<label className="text-xs font-medium text-vscode-fg/70">
+							Tax ID (CPF ou CNPJ)
+						</label>
+						<Input
+							placeholder="000.000.000-00"
+							value={formData.customerTaxId}
+							onChange={(e) =>
+								handleInputChange("customerTaxId", e.target.value)
+							}
+							required
+						/>
+					</div>
+					<Button type="submit" className="w-full mt-4">
+						Gerar Cobrança Pix
+					</Button>
+				</form>
+			</ViewLayout>
+		);
+	}
 
 	if (view === "pix-setup") {
 		return (
