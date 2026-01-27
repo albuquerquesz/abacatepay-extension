@@ -31,6 +31,10 @@ export function WebhooksView() {
     console.log("Listar Webhooks");
   };
 
+  const handleWebhookListen = () => {
+    console.log("Escutar Webhooks");
+  };
+
   const options = [
     {
       label: "Criar Webhook",
@@ -41,6 +45,11 @@ export function WebhooksView() {
       label: "Listar Webhooks",
       description: "Visualize e gerencie seus webhooks ativos",
       onClick: handleListWebhooks,
+    },
+    {
+      label: "Ouvir Webhooks",
+      description: "Ouça webhooks e encaminhe para seu app local",
+      onClick: handleWebhookListen,
     },
   ];
 
