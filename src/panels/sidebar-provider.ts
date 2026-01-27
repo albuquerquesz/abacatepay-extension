@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { apiService } from "../services/api-service";
 import { getNonce } from "../utils/get-nonce";
 import { getUri } from "../utils/get-uri";
 
@@ -24,6 +25,28 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 
 		webviewView.webview.onDidReceiveMessage(async (data) => {
 			switch (data.command) {
+				case "api-request": {
+					try {
+						const result = await apiService.request(data.endpoint, {
+							method: data.method,
+							body: data.body,
+						});
+						webviewView.webview.postMessage({
+							command: "api-response",
+							requestId: data.requestId,
+							success: true,
+							data: result,
+						});
+					} catch (error: any) {
+						webviewView.webview.postMessage({
+							command: "api-response",
+							requestId: data.requestId,
+							success: false,
+							error: error.message || "Unknown error",
+						});
+					}
+					break;
+				}
 				case "check-auth": {
 					const config = vscode.workspace.getConfiguration("abacatepay");
 					const apiKey = config.get("apiKey");
