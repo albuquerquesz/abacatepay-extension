@@ -1,8 +1,6 @@
 import { useState } from "react";
-import {
-	handleCreateCheckout,
-	handleCreatePixQRCode,
-} from "../../functions/billing-handlers";
+import { handleCreateCheckout } from "../../functions/billing-handlers";
+import { api } from "../../services/bridge-api";
 import { vscode } from "../../utils/vscode";
 import { Button, Input, MenuList, type MenuOption, ViewLayout } from "../ui";
 
@@ -10,6 +8,7 @@ type BillingViewState = "main" | "pix-setup" | "pix-manual";
 
 export function BillingView() {
 	const [view, setView] = useState<BillingViewState>("main");
+	const [isLoading, setIsLoading] = useState(false);
 	const [formData, setFormData] = useState({
 		amount: "",
 		description: "",
@@ -36,10 +35,40 @@ export function BillingView() {
 		});
 	};
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		console.log("Gerando Pix com os dados:", formData);
-		handleCreatePixQRCode();
+		setIsLoading(true);
+
+		try {
+			const result = await api.post("/pixQrCode/create", {
+				amount: Number(formData.amount),
+				description: formData.description,
+				expiresIn: 3600, // 1 hora por padrão
+				customer: {
+					name: formData.customerName,
+					email: formData.customerEmail,
+					taxId: formData.customerTaxId,
+				},
+				metadata: {
+					externalId: `ext_${Date.now()}`,
+				},
+			});
+
+			console.log("Pix gerado com sucesso:", result);
+			vscode.postMessage({
+				command: "showInfo",
+				data: "Cobrança Pix gerada com sucesso!",
+			});
+			setView("main");
+		} catch (error: any) {
+			console.error("Erro ao gerar Pix:", error);
+			vscode.postMessage({
+				command: "showError",
+				data: `Erro ao gerar Pix: ${error.message}`,
+			});
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	const mainOptions: MenuOption[] = [
@@ -137,8 +166,8 @@ export function BillingView() {
 							required
 						/>
 					</div>
-					<Button type="submit" className="w-full mt-4">
-						Gerar Cobrança Pix
+					<Button type="submit" className="w-full mt-4" disabled={isLoading}>
+						{isLoading ? "Gerando..." : "Gerar Cobrança Pix"}
 					</Button>
 				</form>
 			</ViewLayout>

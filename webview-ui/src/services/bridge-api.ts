@@ -5,12 +5,6 @@ interface ApiOptions {
 	body?: unknown;
 }
 
-interface ApiResponse<T = any> {
-	success: boolean;
-	data?: T;
-	error?: string;
-}
-
 class BridgeApi {
 	private pendingRequests: Map<
 		string,
