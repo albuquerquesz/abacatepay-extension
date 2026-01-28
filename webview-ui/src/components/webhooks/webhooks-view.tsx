@@ -53,7 +53,7 @@ export function WebhooksView() {
 
   const [inputValue, setInputValue] = useState("");
   const [logLimit, setLogLimit] = useState("");
-  const [logFormat, setLogFormat] = useState("table");
+  const [logFormat, setLogFormat] = useState("");
   const [urlError, setUrlError] = useState<string | undefined>();
 
   const handleSelectSample = (event: SampleEventType) => {
@@ -194,6 +194,7 @@ export function WebhooksView() {
             value={logFormat}
             onChange={(e) => setLogFormat(e.target.value)}
             options={[
+              { label: "Padrão (Tabela)", value: "" },
               { label: "Tabela", value: "table" },
               { label: "JSON", value: "json" },
             ]}

@@ -12,6 +12,12 @@ export function handleListWebhooks() {
 
 export function handleWebhookListen(url: string) {
 	console.log("Escutar Webhooks em:", url);
+	vscode.postMessage({
+		command: "run-terminal",
+		payload: {
+			command: `abacate listen --forward-to ${url}`,
+		},
+	});
 }
 
 export function handleResendEvent(eventId: string) {
@@ -26,8 +32,8 @@ export function handleResendEvent(eventId: string) {
 
 export function handleListLogs(limit?: string, format?: string) {
 	let command = "abacate logs list";
-	if (limit) command += ` --limit ${limit}`;
-	if (format) command += ` --o ${format}`;
+	if (limit && limit.trim() !== "") command += ` --limit ${limit}`;
+	if (format && format.trim() !== "") command += ` --o ${format}`;
 
 	vscode.postMessage({
 		command: "run-terminal",
