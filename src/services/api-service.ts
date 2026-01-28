@@ -8,7 +8,7 @@ interface ApiRequestOptions {
 
 export class ApiService {
 	private get baseUrl(): string {
-		return "https://api.abacatepay.com/v1"; // Ajuste conforme a URL real
+		return "https://api.abacatepay.com/v1";
 	}
 
 	private get apiKey(): string | undefined {

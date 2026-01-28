@@ -83,7 +83,6 @@ export class Panel {
         <body>
           <div id="root"></div>
           <script nonce="${nonce}">
-            // Bloquear service workers em extensões VSCode
             if ('serviceWorker' in navigator) {
               Object.defineProperty(navigator, 'serviceWorker', {
                 get: function() { return undefined; }

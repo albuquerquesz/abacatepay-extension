@@ -9,10 +9,6 @@ interface ChatInputProps {
   placeholder?: string;
 }
 
-/**
- * ChatInput component following SOLID principles.
- * Uses a configuration-based approach for keyboard events to avoid if-else.
- */
 export function ChatInput({
   onSend,
   disabled = false,
@@ -22,7 +18,6 @@ export function ChatInput({
 
   const handleSend = useCallback(() => {
     const trimmedMessage = message.trim();
-    // Logical AND instead of if
     trimmedMessage && !disabled && (onSend(trimmedMessage), setMessage(""));
   }, [message, disabled, onSend]);
 
@@ -31,7 +26,6 @@ export function ChatInput({
     (e: KeyboardEvent<HTMLTextAreaElement>) => void
   > = {
     Enter: (e) => {
-      // Shift+Enter should create a new line, Enter should send
       !e.shiftKey && (e.preventDefault(), handleSend());
     },
   };
