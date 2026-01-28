@@ -3,6 +3,7 @@ import {
   handleCreateWebhook,
   handleListLogs,
   handleResendEvent,
+  handleTriggerEvent,
   handleWebhookListen,
 } from "../../functions/webhook-handlers";
 import {
@@ -38,7 +39,8 @@ type ViewState =
   | "create"
   | "history"
   | "resend"
-  | "logs";
+  | "logs"
+  | "trigger";
 
 interface ViewData {
   title: string;
@@ -117,6 +119,10 @@ export function WebhooksView() {
     handleListLogs(logLimit, logFormat);
   };
 
+  const handleDoTrigger = (event: string) => {
+    handleTriggerEvent(event);
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
     if (urlError) {
@@ -140,6 +146,11 @@ export function WebhooksView() {
         setInputValue("http://localhost:3000");
         setView("listen");
       },
+    },
+    {
+      label: "Simular Evento (Trigger)",
+      description: "Dispare um evento de teste para seus webhooks",
+      onClick: () => setView("trigger"),
     },
     {
       label: "Reenviar Evento",
@@ -171,6 +182,14 @@ export function WebhooksView() {
     label: event,
     description: `Exemplo de payload para ${event}`,
     onClick: () => handleSelectSample(event),
+  }));
+
+  const triggerOptions: MenuOption[] = (
+    Object.keys(SAMPLE_EVENTS) as SampleEventType[]
+  ).map((event) => ({
+    label: event,
+    description: `Disparar evento ${event}`,
+    onClick: () => handleDoTrigger(event),
   }));
 
   if (view === "logs") {
@@ -208,6 +227,18 @@ export function WebhooksView() {
             Se nenhum campo for preenchido, será executado: abacate logs list
           </p>
         </div>
+      </ViewLayout>
+    );
+  }
+
+  if (view === "trigger") {
+    return (
+      <ViewLayout
+        title="Simular Evento"
+        description="Escolha um evento para disparar no terminal"
+        onBack={handleBack}
+      >
+        <MenuList options={triggerOptions} />
       </ViewLayout>
     );
   }

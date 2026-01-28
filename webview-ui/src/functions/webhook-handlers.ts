@@ -42,3 +42,13 @@ export function handleListLogs(limit?: string, format?: string) {
 		},
 	});
 }
+
+export function handleTriggerEvent(event: string) {
+	console.log("Trigando evento:", event);
+	vscode.postMessage({
+		command: "run-terminal",
+		payload: {
+			command: `abacate trigger ${event}`,
+		},
+	});
+}
