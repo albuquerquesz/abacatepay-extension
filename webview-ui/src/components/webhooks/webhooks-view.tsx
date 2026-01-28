@@ -42,28 +42,24 @@ interface ViewData {
 }
 
 export function WebhooksView() {
-  // Navigation state
   const [view, setView] = useState<ViewState>("main");
   const [lastView, setLastView] = useState<ViewState>("main");
   const [viewData, setViewData] = useState<ViewData | null>(null);
 
-  // Input state
   const [inputValue, setInputValue] = useState("");
   const [logLimit, setLogLimit] = useState("");
   const [logFormat, setLogFormat] = useState("");
   const [urlError, setUrlError] = useState<string | undefined>();
 
-  // Navigation handlers
   const handleBack = () => {
     if (view === "json") {
       setView(lastView);
-    } else {
-      setView("main");
+      return;
     }
+    setView("main");
     setUrlError(undefined);
   };
 
-  // Main menu navigation
   const handleGoToCreate = () => {
     setInputValue("http://localhost:3000");
     setView("create");
@@ -93,7 +89,6 @@ export function WebhooksView() {
     setView("samples");
   };
 
-  // URL Input handlers
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
     if (urlError) {
@@ -121,12 +116,12 @@ export function WebhooksView() {
     if (view === "create") {
       // @ts-ignore
       handleCreateWebhook(inputValue);
-    } else {
-      handleWebhookListen(inputValue);
+      return;
     }
+    
+    handleWebhookListen(inputValue);
   };
 
-  // Logs handlers
   const handleLogLimitChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLogLimit(e.target.value);
   };
@@ -139,12 +134,10 @@ export function WebhooksView() {
     handleListLogs(logLimit, logFormat);
   };
 
-  // Trigger handler
   const handleDoTrigger = (event: string) => {
     handleTriggerEvent(event);
   };
 
-  // Samples handlers
   const handleSelectSample = (event: SampleEventType) => {
     setViewData({
       title: event,
@@ -155,7 +148,6 @@ export function WebhooksView() {
     setView("json");
   };
 
-  // Render based on view state
   if (view === "logs") {
     return (
       <WebhooksLogs
