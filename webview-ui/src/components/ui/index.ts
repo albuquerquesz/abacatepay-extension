@@ -1,5 +1,6 @@
 export { Button } from "./button";
 export { Card, CardContent, CardFooter, CardHeader } from "./card";
+export { HistoryItem } from "./history-item";
 export { Input } from "./input";
 export { JsonViewer } from "./json-viewer";
 export { LoadingDots, LoadingWithText, MessageSkeleton } from "./loading-dots";

@@ -19,7 +19,7 @@ export function handleResendEvent(eventId: string) {
 	vscode.postMessage({
 		command: "run-terminal",
 		payload: {
-			command: `abacate resend ${eventId}`,
+			command: `abacate events resend ${eventId}`,
 		},
 	});
 }

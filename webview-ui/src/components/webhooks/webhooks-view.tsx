@@ -5,11 +5,13 @@ import {
   handleWebhookListen,
 } from "../../functions/webhook-handlers";
 import {
+  MOCK_HISTORY,
   SAMPLE_EVENTS,
   type SampleEventType,
 } from "../../functions/webhook-samples";
 import {
   Button,
+  HistoryItem,
   Input,
   JsonViewer,
   MenuList,
@@ -32,64 +34,6 @@ interface ViewData {
   title: string;
   description: string;
   data: unknown;
-}
-
-// Mock history data using existing samples
-const MOCK_HISTORY = [
-  {
-    id: "evt_1",
-    type: "billing.paid",
-    timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(), // 5 min ago
-    payload: SAMPLE_EVENTS["billing.paid"],
-  },
-  {
-    id: "evt_2",
-    type: "payouts.done",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2 hours ago
-    payload: SAMPLE_EVENTS["payouts.done"],
-  },
-  {
-    id: "evt_3",
-    type: "payouts.failed",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), // 1 day ago
-    payload: SAMPLE_EVENTS["payouts.failed"],
-  },
-];
-
-function HistoryItem({ 
-  item, 
-  onClick 
-}: { 
-  item: typeof MOCK_HISTORY[0]; 
-  onClick: () => void 
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="w-full flex flex-col gap-2 p-4 rounded-xl transition-all cursor-pointer text-left group
-        vsc-dark:bg-white/5 vsc-dark:border-white/10
-        vsc-light:bg-vscode-input-bg vsc-light:border-vscode-input-border
-        hover:bg-abacate-primary/10 hover:border-abacate-primary/30"
-    >
-      <div className="flex justify-between items-start w-full">
-        <h3 className="text-sm font-bold text-vscode-fg group-hover:text-abacate-primary transition-colors">
-          {item.type}
-        </h3>
-        <span className="text-[10px] opacity-50 font-mono uppercase tracking-wider">
-          {item.id}
-        </span>
-      </div>
-      <div className="flex justify-between items-center w-full">
-        <p className="text-xs text-vscode-fg/50 font-mono">
-          {new Date(item.timestamp).toLocaleString()}
-        </p>
-        <span className="text-[10px] text-abacate-primary opacity-0 group-hover:opacity-100 transition-opacity font-bold">
-          VER DETALHES →
-        </span>
-      </div>
-    </button>
-  );
 }
 
 export function WebhooksView() {
