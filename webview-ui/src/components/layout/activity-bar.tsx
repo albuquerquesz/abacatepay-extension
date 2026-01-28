@@ -1,4 +1,4 @@
-import { CreditCard, Globe, MessageSquare } from "lucide-react";
+import { CreditCard, Globe, MessageSquare, User } from "lucide-react";
 import type { ViewType } from "../../types/navigation";
 
 interface ActivityBarProps {
@@ -45,6 +45,7 @@ const navItems: { id: ViewType; icon: React.ReactNode; label: string }[] = [
   { id: "chat", icon: <MessageSquare size={20} />, label: "Chat" },
   { id: "billing", icon: <CreditCard size={20} />, label: "Billing" },
   { id: "webhooks", icon: <Globe size={20} />, label: "Webhooks" },
+  { id: "auth", icon: <User size={20} />, label: "Autenticação" },
 ];
 
 export function ActivityBar({ activeView, onViewChange }: ActivityBarProps) {

@@ -1,4 +1,4 @@
-export type ViewType = "chat" | "billing" | "webhooks";
+export type ViewType = "chat" | "billing" | "webhooks" | "auth";
 
 export interface SidebarItem {
 	id: string;

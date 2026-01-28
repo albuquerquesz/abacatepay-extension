@@ -12,7 +12,6 @@ class BridgeApi {
 	> = new Map();
 
 	constructor() {
-		// Ouvir respostas da extensão
 		window.addEventListener("message", (event) => {
 			const message = event.data;
 			if (message.command === "api-response" && message.requestId) {
@@ -46,7 +45,6 @@ class BridgeApi {
 				body: options.body,
 			});
 
-			// Timeout de segurança (30s)
 			setTimeout(() => {
 				if (this.pendingRequests.has(requestId)) {
 					this.pendingRequests.delete(requestId);

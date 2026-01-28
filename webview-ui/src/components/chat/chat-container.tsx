@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useChat } from "../../hooks/use-chat";
 import type { ViewType } from "../../types/navigation";
+import { AuthView } from "../auth";
 import { BillingView } from "../billing/billing-view";
 import { ActivityBar } from "../layout/activity-bar";
 import { Sidebar } from "../layout/sidebar";
@@ -42,6 +43,8 @@ export function ChatContainer() {
         return <BillingView />;
       case "webhooks":
         return <WebhooksView />;
+      case "auth":
+        return <AuthView />;
       default:
         return renderChatView();
     }
