@@ -176,7 +176,7 @@ export function WebhooksView() {
   if (view === "logs") {
     return (
       <ViewLayout
-        title="Visualizar Logs"
+        title="Histórico de Eventos"
         description="Configure os parâmetros para listar os logs no terminal (opcional)"
         onBack={handleBack}
       >
