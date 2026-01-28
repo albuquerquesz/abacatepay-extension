@@ -1,8 +1,14 @@
 import { useState } from "react";
 import { api } from "../../services/bridge-api";
 import { vscode } from "../../utils/vscode";
-import { handleCheckPayment } from "../../functions/billing-handlers";
-import { Button, Input, MenuList, type MenuOption, ViewLayout } from "../ui";
+import {
+  Button,
+  Input,
+  JsonViewer,
+  MenuList,
+  type MenuOption,
+  ViewLayout,
+} from "../ui";
 
 type BillingViewState =
   | "main"
@@ -16,6 +22,7 @@ export function BillingView() {
   const [view, setView] = useState<BillingViewState>("main");
   const [isLoading, setIsLoading] = useState(false);
   const [paymentId, setPaymentId] = useState("");
+  const [checkResult, setCheckResult] = useState<any>(null);
   const [formData, setFormData] = useState({
     amount: "",
     description: "",
@@ -56,7 +63,7 @@ export function BillingView() {
     });
   };
 
-  const handleDoCheckPayment = () => {
+  const handleDoCheckPayment = async () => {
     if (!paymentId.trim()) {
       vscode.postMessage({
         command: "showError",
@@ -64,7 +71,32 @@ export function BillingView() {
       });
       return;
     }
-    handleCheckPayment(paymentId);
+
+    setIsLoading(true);
+    setCheckResult(null);
+
+    try {
+      // Usando o endpoint fornecido: /pixQrCode/check
+      const result = await api.get(`/pixQrCode/check?id=${paymentId}`);
+      setCheckResult(result);
+      console.log("Resultado da checagem:", result);
+    } catch (error: any) {
+      console.error("Erro ao checar pagamento:", error);
+      vscode.postMessage({
+        command: "showError",
+        data: `Erro ao checar pagamento: ${error.message}`,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleBack = () => {
+    if (checkResult) {
+      setCheckResult(null);
+    } else {
+      setView("main");
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -122,6 +154,7 @@ export function BillingView() {
       description: "Consulte o status de uma cobrança existente",
       onClick: () => {
         setPaymentId("");
+        setCheckResult(null);
         setView("check-payment");
       },
     },
@@ -157,19 +190,43 @@ export function BillingView() {
     return (
       <ViewLayout
         title="Checar Pagamento"
-        description="Informe o ID da cobrança para verificar o status"
-        onBack={() => setView("main")}
+        description={
+          checkResult
+            ? "Status do pagamento retornado pela API"
+            : "Informe o ID da cobrança para verificar o status"
+        }
+        onBack={handleBack}
       >
         <div className="space-y-4">
-          <Input
-            label="ID do Pagamento"
-            placeholder="Ex: bill_..."
-            value={paymentId}
-            onChange={(e) => setPaymentId(e.target.value)}
-          />
-          <Button className="w-full" onClick={handleDoCheckPayment}>
-            Verificar no Terminal
-          </Button>
+          {!checkResult ? (
+            <>
+              <Input
+                label="ID do Pagamento"
+                placeholder="Ex: bill_..."
+                value={paymentId}
+                onChange={(e) => setPaymentId(e.target.value)}
+                disabled={isLoading}
+              />
+              <Button
+                className="w-full"
+                onClick={handleDoCheckPayment}
+                disabled={isLoading}
+              >
+                {isLoading ? "Consultando..." : "Verificar Status"}
+              </Button>
+            </>
+          ) : (
+            <div className="space-y-4 animate-fade-in">
+              <JsonViewer data={checkResult} />
+              <Button
+                variant="secondary"
+                className="w-full"
+                onClick={() => setCheckResult(null)}
+              >
+                Nova Consulta
+              </Button>
+            </div>
+          )}
         </div>
       </ViewLayout>
     );
