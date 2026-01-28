@@ -1,21 +1,25 @@
 import { MenuList, type MenuOption, ViewLayout } from "../ui";
 
 interface AuthMainMenuProps {
-  onApiKey: () => void;
+  onAddProfile: () => void;
   onListProfile: () => void;
   onLogout: () => void;
 }
 
-export function AuthMainMenu({ onApiKey, onListProfile, onLogout }: AuthMainMenuProps) {
+export function AuthMainMenu({
+  onAddProfile,
+  onListProfile,
+  onLogout,
+}: AuthMainMenuProps) {
   const options: MenuOption[] = [
     {
-      label: "Configurar API Key",
-      description: "Adicione ou atualize sua chave de API",
-      onClick: onApiKey,
+      label: "Adicionar/Atualizar Perfil",
+      description: "Configure um perfil novo ou existente",
+      onClick: onAddProfile,
     },
     {
-      label: "Listar Perfil",
-      description: "Veja as informações do seu perfil no terminal",
+      label: "Listar Perfis",
+      description: "Veja as informações dos seus perfis no terminal",
       onClick: onListProfile,
     },
     {
