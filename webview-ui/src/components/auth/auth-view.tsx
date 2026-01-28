@@ -4,17 +4,26 @@ import { Button, Input, ViewLayout } from "../ui";
 import { AuthMainMenu } from "./auth-main-menu";
 
 type AuthViewState = "main" | "profile-form";
+type ProfileFormMode = "login" | "switch";
 
 export function AuthView() {
   const [view, setView] = useState<AuthViewState>("main");
+  const [formMode, setFormMode] = useState<ProfileFormMode>("login");
   const [profileName, setProfileName] = useState("");
 
   const handleGoToProfileForm = () => {
     setProfileName("");
+    setFormMode("login");
     setView("profile-form");
   };
 
-  const handleLoginProfile = () => {
+  const handleGoToSwitchProfile = () => {
+    setProfileName("");
+    setFormMode("switch");
+    setView("profile-form");
+  };
+
+  const handleProfileSubmit = () => {
     if (!profileName.trim()) {
       vscode.postMessage({
         command: "showError",
@@ -23,10 +32,15 @@ export function AuthView() {
       return;
     }
 
+    const command =
+      formMode === "login"
+        ? `abacate login --name ${profileName}`
+        : `abacate switch ${profileName}`;
+
     vscode.postMessage({
       command: "run-terminal",
       payload: {
-        command: `abacate login --name ${profileName}`,
+        command,
       },
     });
     setView("main");
@@ -48,10 +62,15 @@ export function AuthView() {
   };
 
   if (view === "profile-form") {
+    const isSwitch = formMode === "switch";
     return (
       <ViewLayout
-        title="Configurar Perfil"
-        description="Informe o nome do perfil para autenticar"
+        title={isSwitch ? "Mudar de Perfil" : "Configurar Perfil"}
+        description={
+          isSwitch
+            ? "Informe o nome do perfil para o qual deseja alternar"
+            : "Informe o nome do perfil para autenticar"
+        }
         onBack={() => setView("main")}
       >
         <div className="space-y-4">
@@ -61,8 +80,8 @@ export function AuthView() {
             value={profileName}
             onChange={(e) => setProfileName(e.target.value)}
           />
-          <Button className="w-full" onClick={handleLoginProfile}>
-            Login no Terminal
+          <Button className="w-full" onClick={handleProfileSubmit}>
+            {isSwitch ? "Alternar Perfil" : "Login no Terminal"}
           </Button>
         </div>
       </ViewLayout>
@@ -72,6 +91,7 @@ export function AuthView() {
   return (
     <AuthMainMenu
       onAddProfile={handleGoToProfileForm}
+      onSwitchProfile={handleGoToSwitchProfile}
       onListProfile={handleListProfile}
       onLogout={handleLogout}
     />

@@ -2,12 +2,14 @@ import { MenuList, type MenuOption, ViewLayout } from "../ui";
 
 interface AuthMainMenuProps {
   onAddProfile: () => void;
+  onSwitchProfile: () => void;
   onListProfile: () => void;
   onLogout: () => void;
 }
 
 export function AuthMainMenu({
   onAddProfile,
+  onSwitchProfile,
   onListProfile,
   onLogout,
 }: AuthMainMenuProps) {
@@ -16,6 +18,11 @@ export function AuthMainMenu({
       label: "Adicionar/Atualizar Perfil",
       description: "Configure um perfil novo ou existente",
       onClick: onAddProfile,
+    },
+    {
+      label: "Mudar de Perfil",
+      description: "Alterne rapidamente entre perfis salvos",
+      onClick: onSwitchProfile,
     },
     {
       label: "Listar Perfis",
