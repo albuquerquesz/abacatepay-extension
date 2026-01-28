@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { vscode } from "../../utils/vscode";
 import { AuthMainMenu } from "./auth-main-menu";
 
 type AuthViewState = "main" | "api-key";
@@ -10,19 +11,29 @@ export function AuthView() {
     setView("api-key");
   };
 
+  const handleListProfile = () => {
+    vscode.postMessage({
+      command: "run-terminal",
+      payload: {
+        command: "abacate profile list",
+      },
+    });
+  };
+
   const handleLogout = () => {
-    // TODO: implementar logout
-    console.log("Logout");
+    vscode.postMessage({
+      command: "logout",
+    });
   };
 
   if (view === "api-key") {
-    // TODO: implementar tela de API key
     return null;
   }
 
   return (
     <AuthMainMenu
       onApiKey={handleApiKey}
+      onListProfile={handleListProfile}
       onLogout={handleLogout}
     />
   );

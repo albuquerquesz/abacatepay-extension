@@ -1,7 +1,5 @@
 import { vscode } from "../utils/vscode";
 
-// TODO: Implementar integração com API AbacatePay
-
 export function handleCreateWebhook(url: string) {
 	console.log("Criar Webhook em:", url);
 }
