@@ -11,10 +11,16 @@ type BillingViewState =
   | "pix-manual"
   | "checkout-setup"
   | "checkout-manual"
-  | "check-payment";
+  | "check-payment"
+  | "simulate-payment";
 
 export function BillingView() {
   const [view, setView] = useState<BillingViewState>("main");
+  const [isLoading, setIsLoading] = useState(false);
+  const [paymentId, setPaymentId] = useState("");
+  const [checkResult, setCheckResult] = useState<any>(null);
+  const [simulateResult, setSimulateResult] = useState<any>(null);
+  const [formData, setFormData] = useState({
 
   const handleRandomPix = () => {
     console.log("Random Pix selected");
