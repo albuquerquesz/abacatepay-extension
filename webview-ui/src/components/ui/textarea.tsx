@@ -46,28 +46,25 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 			const textarea = textareaRef.current;
 			if (!textarea) return;
 
-			textarea.style.height = "auto";
+			textarea.style.height = "0px";
+			const scrollHeight = textarea.scrollHeight;
 
 			const minHeight = LINE_HEIGHT * minRows + VERTICAL_PADDING;
 			const maxHeight = LINE_HEIGHT * maxRows + VERTICAL_PADDING;
 
 			const newHeight = Math.min(
-				Math.max(textarea.scrollHeight, minHeight),
+				Math.max(scrollHeight, minHeight),
 				maxHeight,
 			);
 			textarea.style.height = `${newHeight}px`;
 
 			textarea.style.overflowY =
-				textarea.scrollHeight > maxHeight ? "auto" : "hidden";
+				scrollHeight > maxHeight ? "auto" : "hidden";
 		}, [minRows, maxRows]);
 
 		useEffect(() => {
 			adjustHeight();
-		}, [adjustHeight]);
-
-		useEffect(() => {
-			adjustHeight();
-		}, [adjustHeight]);
+		}, [value, adjustHeight]);
 
 		return (
 			<textarea
@@ -82,17 +79,11 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           w-full
           bg-vscode-input-bg
           text-vscode-input-fg
-          border border-vscode-input-border
-          rounded-lg
-          px-3 py-2
-          text-sm
           leading-relaxed
           resize-none
           transition-colors duration-150
           placeholder:text-vscode-fg/50
           focus:outline-none
-          focus:ring-2 focus:ring-[#9EEA6C]/50
-          focus:border-[#9EEA6C]
           disabled:opacity-50 disabled:cursor-not-allowed
           ${className}
         `}

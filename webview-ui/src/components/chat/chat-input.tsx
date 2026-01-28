@@ -44,8 +44,8 @@ export function ChatInput({
   const canSend = message.trim().length > 0 && !disabled;
 
   return (
-    <div className="p-4 bg-vscode-bg border-t border-vscode-border">
-      <div className="relative flex flex-col w-full max-w-3xl mx-auto rounded-2xl border border-vscode-input-border bg-vscode-input-bg focus-within:border-abacate-primary/50 focus-within:ring-1 focus-within:ring-abacate-primary/30 transition-all duration-200">
+    <div className="p-4 bg-vscode-bg border-t border-vscode-border w-full flex justify-center">
+      <div className="relative flex flex-col w-full max-w-3xl rounded-2xl border border-vscode-input-border bg-vscode-input-bg focus-within:border-abacate-primary/50 focus-within:ring-1 focus-within:ring-abacate-primary/30 transition-all duration-200">
         <Textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
@@ -54,10 +54,10 @@ export function ChatInput({
           disabled={disabled}
           minRows={1}
           maxRows={12}
-          className="w-full bg-transparent border-none focus:ring-0 px-4 py-4 pr-14 text-sm"
+          className="w-full bg-transparent border-none focus:ring-0 px-4 py-4 pr-14 text-sm rounded-2xl"
         />
 
-        <div className="absolute right-2 bottom-2">
+        <div className="absolute right-3 bottom-3">
           <Button
             variant="primary"
             size="sm"
