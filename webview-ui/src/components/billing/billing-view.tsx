@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { api } from "../../services/bridge-api";
 import { vscode } from "../../utils/vscode";
+import { handleCheckPayment } from "../../functions/billing-handlers";
 import { Button, Input, MenuList, type MenuOption, ViewLayout } from "../ui";
 
 type BillingViewState =
@@ -8,11 +9,13 @@ type BillingViewState =
   | "pix-setup"
   | "pix-manual"
   | "checkout-setup"
-  | "checkout-manual";
+  | "checkout-manual"
+  | "check-payment";
 
 export function BillingView() {
   const [view, setView] = useState<BillingViewState>("main");
   const [isLoading, setIsLoading] = useState(false);
+  const [paymentId, setPaymentId] = useState("");
   const [formData, setFormData] = useState({
     amount: "",
     description: "",
@@ -51,6 +54,17 @@ export function BillingView() {
         command: "abacate create checkout",
       },
     });
+  };
+
+  const handleDoCheckPayment = () => {
+    if (!paymentId.trim()) {
+      vscode.postMessage({
+        command: "showError",
+        data: "O ID do pagamento é obrigatório",
+      });
+      return;
+    }
+    handleCheckPayment(paymentId);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -103,6 +117,14 @@ export function BillingView() {
       description: "Página de pagamento segura e otimizada",
       onClick: () => setView("checkout-setup"),
     },
+    {
+      label: "Checar Pagamento",
+      description: "Consulte o status de uma cobrança existente",
+      onClick: () => {
+        setPaymentId("");
+        setView("check-payment");
+      },
+    },
   ];
 
   const pixOptions: MenuOption[] = [
@@ -130,6 +152,28 @@ export function BillingView() {
       onClick: handleRandomCheckout,
     },
   ];
+
+  if (view === "check-payment") {
+    return (
+      <ViewLayout
+        title="Checar Pagamento"
+        description="Informe o ID da cobrança para verificar o status"
+        onBack={() => setView("main")}
+      >
+        <div className="space-y-4">
+          <Input
+            label="ID do Pagamento"
+            placeholder="Ex: bill_..."
+            value={paymentId}
+            onChange={(e) => setPaymentId(e.target.value)}
+          />
+          <Button className="w-full" onClick={handleDoCheckPayment}>
+            Verificar no Terminal
+          </Button>
+        </div>
+      </ViewLayout>
+    );
+  }
 
   if (view === "pix-manual" || view === "checkout-manual") {
     const isCheckout = view === "checkout-manual";
