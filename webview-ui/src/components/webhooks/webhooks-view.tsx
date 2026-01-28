@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   handleCreateWebhook,
+  handleListLogs,
   handleResendEvent,
   handleWebhookListen,
 } from "../../functions/webhook-handlers";
@@ -16,6 +17,7 @@ import {
   JsonViewer,
   MenuList,
   type MenuOption,
+  Select,
   ViewLayout,
 } from "../ui";
 
@@ -28,7 +30,15 @@ function validateUrl(url: string): boolean {
   }
 }
 
-type ViewState = "main" | "samples" | "json" | "listen" | "create" | "history" | "resend";
+type ViewState =
+  | "main"
+  | "samples"
+  | "json"
+  | "listen"
+  | "create"
+  | "history"
+  | "resend"
+  | "logs";
 
 interface ViewData {
   title: string;
@@ -40,8 +50,10 @@ export function WebhooksView() {
   const [view, setView] = useState<ViewState>("main");
   const [lastView, setLastView] = useState<ViewState>("main");
   const [viewData, setViewData] = useState<ViewData | null>(null);
-  
+
   const [inputValue, setInputValue] = useState("");
+  const [logLimit, setLogLimit] = useState("");
+  const [logFormat, setLogFormat] = useState("table");
   const [urlError, setUrlError] = useState<string | undefined>();
 
   const handleSelectSample = (event: SampleEventType) => {
@@ -54,7 +66,7 @@ export function WebhooksView() {
     setView("json");
   };
 
-  const handleSelectHistoryItem = (item: typeof MOCK_HISTORY[0]) => {
+  const handleSelectHistoryItem = (item: (typeof MOCK_HISTORY)[0]) => {
     setViewData({
       title: item.type,
       description: `Recebido em ${new Date(item.timestamp).toLocaleString()}`,
@@ -101,6 +113,10 @@ export function WebhooksView() {
     handleResendEvent(inputValue);
   };
 
+  const handleDoListLogs = () => {
+    handleListLogs(logLimit, logFormat);
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
     if (urlError) {
@@ -136,7 +152,11 @@ export function WebhooksView() {
     {
       label: "Histórico de Eventos",
       description: "Visualize os últimos eventos recebidos",
-      onClick: () => setView("history"),
+      onClick: () => {
+        setLogLimit("");
+        setLogFormat("table");
+        setView("logs");
+      },
     },
     {
       label: "Exemplos de JSON",
@@ -153,10 +173,48 @@ export function WebhooksView() {
     onClick: () => handleSelectSample(event),
   }));
 
+  if (view === "logs") {
+    return (
+      <ViewLayout
+        title="Visualizar Logs"
+        description="Configure os parâmetros para listar os logs no terminal (opcional)"
+        onBack={handleBack}
+      >
+        <div className="space-y-4">
+          <Input
+            type="number"
+            label="Limite (Opcional)"
+            placeholder="Ex: 10"
+            value={logLimit}
+            onChange={(e) => setLogLimit(e.target.value)}
+          />
+
+          <Select
+            label="Formato de Saída (Opcional)"
+            value={logFormat}
+            onChange={(e) => setLogFormat(e.target.value)}
+            options={[
+              { label: "Tabela", value: "table" },
+              { label: "JSON", value: "json" },
+            ]}
+          />
+
+          <Button className="w-full" onClick={handleDoListLogs}>
+            Executar no Terminal
+          </Button>
+
+          <p className="text-[10px] text-vscode-foreground opacity-50 text-center italic">
+            Se nenhum campo for preenchido, será executado: abacate logs list
+          </p>
+        </div>
+      </ViewLayout>
+    );
+  }
+
   if (view === "listen" || view === "create" || view === "resend") {
     const isCreate = view === "create";
     const isResend = view === "resend";
-    
+
     let title = "Ouvir Webhooks";
     let description = "Informe a URL para encaminhar os webhooks";
     let buttonText = "Iniciar Escuta";
@@ -177,11 +235,7 @@ export function WebhooksView() {
     }
 
     return (
-      <ViewLayout
-        title={title}
-        description={description}
-        onBack={handleBack}
-      >
+      <ViewLayout title={title} description={description} onBack={handleBack}>
         <div className="space-y-4">
           <Input
             type={isResend ? "text" : "url"}
@@ -190,10 +244,7 @@ export function WebhooksView() {
             onChange={handleInputChange}
             error={urlError}
           />
-          <Button
-            className="w-full"
-            onClick={action}
-          >
+          <Button className="w-full" onClick={action}>
             {buttonText}
           </Button>
         </div>
@@ -254,3 +305,4 @@ export function WebhooksView() {
     </ViewLayout>
   );
 }
+

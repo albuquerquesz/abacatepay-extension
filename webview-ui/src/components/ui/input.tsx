@@ -1,12 +1,18 @@
 import type { InputHTMLAttributes } from "react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+	label?: string;
 	error?: string;
 }
 
-export function Input({ error, className = "", ...props }: InputProps) {
+export function Input({ label, error, className = "", ...props }: InputProps) {
 	return (
-		<div className="w-full">
+		<div className="w-full space-y-1.5">
+			{label && (
+				<label className="text-xs font-medium text-vscode-foreground opacity-80">
+					{label}
+				</label>
+			)}
 			<input
 				className={`
           w-full
