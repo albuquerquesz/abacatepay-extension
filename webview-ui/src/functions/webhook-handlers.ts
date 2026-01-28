@@ -23,3 +23,16 @@ export function handleResendEvent(eventId: string) {
 		},
 	});
 }
+
+export function handleListLogs(limit?: string, format?: string) {
+	let command = "abacate logs list";
+	if (limit) command += ` --limit ${limit}`;
+	if (format) command += ` --o ${format}`;
+
+	vscode.postMessage({
+		command: "run-terminal",
+		payload: {
+			command,
+		},
+	});
+}
