@@ -7,20 +7,14 @@ import {
   handleWebhookListen,
 } from "../../functions/webhook-handlers";
 import {
-  MOCK_HISTORY,
   SAMPLE_EVENTS,
   type SampleEventType,
 } from "../../functions/webhook-samples";
-import {
-  Button,
-  HistoryItem,
-  Input,
-  JsonViewer,
-  MenuList,
-  type MenuOption,
-  Select,
-  ViewLayout,
-} from "../ui";
+import { WebhooksLogs } from "./webhooks-logs";
+import { WebhooksMainMenu } from "./webhooks-main-menu";
+import { WebhooksJsonViewer, WebhooksSamplesList } from "./webhooks-samples";
+import { WebhooksTrigger } from "./webhooks-trigger";
+import { WebhooksUrlInput, type UrlInputMode } from "./webhooks-url-input";
 
 function validateUrl(url: string): boolean {
   try {
@@ -37,7 +31,6 @@ type ViewState =
   | "json"
   | "listen"
   | "create"
-  | "history"
   | "resend"
   | "logs"
   | "trigger";
@@ -49,15 +42,109 @@ interface ViewData {
 }
 
 export function WebhooksView() {
+  // Navigation state
   const [view, setView] = useState<ViewState>("main");
   const [lastView, setLastView] = useState<ViewState>("main");
   const [viewData, setViewData] = useState<ViewData | null>(null);
 
+  // Input state
   const [inputValue, setInputValue] = useState("");
   const [logLimit, setLogLimit] = useState("");
   const [logFormat, setLogFormat] = useState("");
   const [urlError, setUrlError] = useState<string | undefined>();
 
+  // Navigation handlers
+  const handleBack = () => {
+    if (view === "json") {
+      setView(lastView);
+    } else {
+      setView("main");
+    }
+    setUrlError(undefined);
+  };
+
+  // Main menu navigation
+  const handleGoToCreate = () => {
+    setInputValue("http://localhost:3000");
+    setView("create");
+  };
+
+  const handleGoToListen = () => {
+    setInputValue("http://localhost:3000");
+    setView("listen");
+  };
+
+  const handleGoToTrigger = () => {
+    setView("trigger");
+  };
+
+  const handleGoToResend = () => {
+    setInputValue("");
+    setView("resend");
+  };
+
+  const handleGoToLogs = () => {
+    setLogLimit("");
+    setLogFormat("table");
+    setView("logs");
+  };
+
+  const handleGoToSamples = () => {
+    setView("samples");
+  };
+
+  // URL Input handlers
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    if (urlError) {
+      setUrlError(undefined);
+    }
+  };
+
+  const handleUrlSubmit = () => {
+    if (view === "resend") {
+      if (!inputValue.trim()) {
+        setUrlError("O ID do evento é obrigatório");
+        return;
+      }
+      setUrlError(undefined);
+      handleResendEvent(inputValue);
+      return;
+    }
+
+    if (!validateUrl(inputValue)) {
+      setUrlError("URL inválida. Use o formato: http://localhost:3000");
+      return;
+    }
+    setUrlError(undefined);
+
+    if (view === "create") {
+      // @ts-ignore
+      handleCreateWebhook(inputValue);
+    } else {
+      handleWebhookListen(inputValue);
+    }
+  };
+
+  // Logs handlers
+  const handleLogLimitChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLogLimit(e.target.value);
+  };
+
+  const handleLogFormatChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setLogFormat(e.target.value);
+  };
+
+  const handleLogsSubmit = () => {
+    handleListLogs(logLimit, logFormat);
+  };
+
+  // Trigger handler
+  const handleDoTrigger = (event: string) => {
+    handleTriggerEvent(event);
+  };
+
+  // Samples handlers
   const handleSelectSample = (event: SampleEventType) => {
     setViewData({
       title: event,
@@ -68,273 +155,65 @@ export function WebhooksView() {
     setView("json");
   };
 
-  const handleSelectHistoryItem = (item: (typeof MOCK_HISTORY)[0]) => {
-    setViewData({
-      title: item.type,
-      description: `Recebido em ${new Date(item.timestamp).toLocaleString()}`,
-      data: item.payload,
-    });
-    setLastView("history");
-    setView("json");
-  };
-
-  const handleBack = () => {
-    if (view === "json") {
-      setView(lastView);
-    } else {
-      setView("main");
-    }
-    setUrlError(undefined);
-  };
-
-  const handleStartListen = () => {
-    if (!validateUrl(inputValue)) {
-      setUrlError("URL inválida. Use o formato: http://localhost:3000");
-      return;
-    }
-    setUrlError(undefined);
-    handleWebhookListen(inputValue);
-  };
-
-  const handleStartCreate = () => {
-    if (!validateUrl(inputValue)) {
-      setUrlError("URL inválida. Use o formato: http://localhost:3000");
-      return;
-    }
-    setUrlError(undefined);
-    // @ts-ignore
-    handleCreateWebhook(inputValue);
-  };
-
-  const handleDoResend = () => {
-    if (!inputValue.trim()) {
-      setUrlError("O ID do evento é obrigatório");
-      return;
-    }
-    setUrlError(undefined);
-    handleResendEvent(inputValue);
-  };
-
-  const handleDoListLogs = () => {
-    handleListLogs(logLimit, logFormat);
-  };
-
-  const handleDoTrigger = (event: string) => {
-    handleTriggerEvent(event);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-    if (urlError) {
-      setUrlError(undefined);
-    }
-  };
-
-  const mainOptions: MenuOption[] = [
-    {
-      label: "Criar Webhook",
-      description: "Configure um novo endpoint de notificação",
-      onClick: () => {
-        setInputValue("http://localhost:3000");
-        setView("create");
-      },
-    },
-    {
-      label: "Ouvir Webhooks",
-      description: "Ouça webhooks e encaminhe para seu app local",
-      onClick: () => {
-        setInputValue("http://localhost:3000");
-        setView("listen");
-      },
-    },
-    {
-      label: "Simular Evento (Trigger)",
-      description: "Dispare um evento de teste para seus webhooks",
-      onClick: () => setView("trigger"),
-    },
-    {
-      label: "Reenviar Evento",
-      description: "Reenvie um evento passado para seu endpoint local",
-      onClick: () => {
-        setInputValue("");
-        setView("resend");
-      },
-    },
-    {
-      label: "Histórico de Eventos",
-      description: "Visualize os últimos eventos recebidos",
-      onClick: () => {
-        setLogLimit("");
-        setLogFormat("table");
-        setView("logs");
-      },
-    },
-    {
-      label: "Exemplos de JSON",
-      description: "Visualize payloads de eventos suportados",
-      onClick: () => setView("samples"),
-    },
-  ];
-
-  const sampleOptions: MenuOption[] = (
-    Object.keys(SAMPLE_EVENTS) as SampleEventType[]
-  ).map((event) => ({
-    label: event,
-    description: `Exemplo de payload para ${event}`,
-    onClick: () => handleSelectSample(event),
-  }));
-
-  const triggerOptions: MenuOption[] = (
-    Object.keys(SAMPLE_EVENTS) as SampleEventType[]
-  ).map((event) => ({
-    label: event,
-    description: `Disparar evento ${event}`,
-    onClick: () => handleDoTrigger(event),
-  }));
-
+  // Render based on view state
   if (view === "logs") {
     return (
-      <ViewLayout
-        title="Histórico de Eventos"
-        description="Configure os parâmetros para listar os logs no terminal (opcional)"
+      <WebhooksLogs
+        logLimit={logLimit}
+        logFormat={logFormat}
+        onLogLimitChange={handleLogLimitChange}
+        onLogFormatChange={handleLogFormatChange}
+        onSubmit={handleLogsSubmit}
         onBack={handleBack}
-      >
-        <div className="space-y-4">
-          <Input
-            type="number"
-            label="Limite (Opcional)"
-            placeholder="Ex: 10"
-            value={logLimit}
-            onChange={(e) => setLogLimit(e.target.value)}
-          />
-
-          <Select
-            label="Formato de Saída (Opcional)"
-            value={logFormat}
-            onChange={(e) => setLogFormat(e.target.value)}
-            options={[
-              { label: "Padrão (Tabela)", value: "" },
-              { label: "Tabela", value: "table" },
-              { label: "JSON", value: "json" },
-            ]}
-          />
-
-          <Button className="w-full" onClick={handleDoListLogs}>
-            Executar no Terminal
-          </Button>
-
-          <p className="text-[10px] text-vscode-foreground opacity-50 text-center italic">
-            Se nenhum campo for preenchido, será executado: abacate logs list
-          </p>
-        </div>
-      </ViewLayout>
+      />
     );
   }
 
   if (view === "trigger") {
-    return (
-      <ViewLayout
-        title="Simular Evento"
-        description="Escolha um evento para disparar no terminal"
-        onBack={handleBack}
-      >
-        <MenuList options={triggerOptions} />
-      </ViewLayout>
-    );
+    return <WebhooksTrigger onTrigger={handleDoTrigger} onBack={handleBack} />;
   }
 
   if (view === "listen" || view === "create" || view === "resend") {
-    const isCreate = view === "create";
-    const isResend = view === "resend";
-
-    let title = "Ouvir Webhooks";
-    let description = "Informe a URL para encaminhar os webhooks";
-    let buttonText = "Iniciar Escuta";
-    let placeholder = "http://localhost:3000";
-    let action = handleStartListen;
-
-    if (isCreate) {
-      title = "Criar Webhook";
-      description = "Informe a URL para onde os eventos serão enviados";
-      buttonText = "Criar Webhook";
-      action = handleStartCreate;
-    } else if (isResend) {
-      title = "Reenviar Evento";
-      description = "Informe o ID do evento para reenvio local";
-      buttonText = "Reenviar Evento";
-      placeholder = "evt_...";
-      action = handleDoResend;
-    }
-
     return (
-      <ViewLayout title={title} description={description} onBack={handleBack}>
-        <div className="space-y-4">
-          <Input
-            type={isResend ? "text" : "url"}
-            placeholder={placeholder}
-            value={inputValue}
-            onChange={handleInputChange}
-            error={urlError}
-          />
-          <Button className="w-full" onClick={action}>
-            {buttonText}
-          </Button>
-        </div>
-      </ViewLayout>
+      <WebhooksUrlInput
+        mode={view as UrlInputMode}
+        inputValue={inputValue}
+        urlError={urlError}
+        onInputChange={handleInputChange}
+        onSubmit={handleUrlSubmit}
+        onBack={handleBack}
+      />
     );
   }
 
   if (view === "samples") {
     return (
-      <ViewLayout
-        title="Exemplos de JSON"
-        description="Selecione um evento para visualizar o payload"
+      <WebhooksSamplesList
+        onSelectSample={handleSelectSample}
         onBack={handleBack}
-      >
-        <MenuList options={sampleOptions} />
-      </ViewLayout>
-    );
-  }
-
-  if (view === "history") {
-    return (
-      <ViewLayout
-        title="Histórico de Eventos"
-        description="Últimos eventos processados"
-        onBack={handleBack}
-      >
-        <div className="space-y-3">
-          {MOCK_HISTORY.map((item) => (
-            <HistoryItem
-              key={item.id}
-              item={item}
-              onClick={() => handleSelectHistoryItem(item)}
-            />
-          ))}
-        </div>
-      </ViewLayout>
+      />
     );
   }
 
   if (view === "json" && viewData) {
     return (
-      <ViewLayout
+      <WebhooksJsonViewer
         title={viewData.title}
         description={viewData.description}
+        data={viewData.data}
         onBack={handleBack}
-      >
-        <JsonViewer data={viewData.data} />
-      </ViewLayout>
+      />
     );
   }
 
   return (
-    <ViewLayout
-      title="Webhooks"
-      description="Configure seus endpoints de notificação"
-    >
-      <MenuList options={mainOptions} />
-    </ViewLayout>
+    <WebhooksMainMenu
+      onCreateWebhook={handleGoToCreate}
+      onListenWebhooks={handleGoToListen}
+      onTriggerEvent={handleGoToTrigger}
+      onResendEvent={handleGoToResend}
+      onHistoryLogs={handleGoToLogs}
+      onSamples={handleGoToSamples}
+    />
   );
 }
-
