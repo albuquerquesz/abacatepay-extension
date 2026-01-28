@@ -4,12 +4,14 @@ interface BillingMainMenuProps {
   onPixSetup: () => void;
   onCheckoutSetup: () => void;
   onCheckPayment: () => void;
+  onSimulatePayment: () => void;
 }
 
 export function BillingMainMenu({
   onPixSetup,
   onCheckoutSetup,
   onCheckPayment,
+  onSimulatePayment,
 }: BillingMainMenuProps) {
   const mainOptions: MenuOption[] = [
     {
@@ -26,6 +28,11 @@ export function BillingMainMenu({
       label: "Checar Pagamento",
       description: "Consulte o status de uma cobrança existente",
       onClick: onCheckPayment,
+    },
+    {
+      label: "Simular Pagamento",
+      description: "Simule um pagamento PIX em ambiente de teste",
+      onClick: onSimulatePayment,
     },
   ];
 

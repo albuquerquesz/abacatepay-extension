@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { vscode } from "../../utils/vscode";
 import { BillingCheckPayment } from "./billing-check-payment";
+import { BillingSimulatePayment } from "./billing-simulate-payment";
 import { BillingForm } from "./billing-form";
 import { BillingMainMenu } from "./billing-main-menu";
 import { BillingSetupMenu } from "./billing-setup-menu";
@@ -16,11 +17,6 @@ type BillingViewState =
 
 export function BillingView() {
   const [view, setView] = useState<BillingViewState>("main");
-  const [isLoading, setIsLoading] = useState(false);
-  const [paymentId, setPaymentId] = useState("");
-  const [checkResult, setCheckResult] = useState<any>(null);
-  const [simulateResult, setSimulateResult] = useState<any>(null);
-  const [formData, setFormData] = useState({
 
   const handleRandomPix = () => {
     console.log("Random Pix selected");
@@ -44,6 +40,10 @@ export function BillingView() {
 
   if (view === "check-payment") {
     return <BillingCheckPayment onBack={() => setView("main")} />;
+  }
+
+  if (view === "simulate-payment") {
+    return <BillingSimulatePayment onBack={() => setView("main")} />;
   }
 
   if (view === "pix-manual") {
@@ -93,6 +93,7 @@ export function BillingView() {
       onPixSetup={() => setView("pix-setup")}
       onCheckoutSetup={() => setView("checkout-setup")}
       onCheckPayment={() => setView("check-payment")}
+      onSimulatePayment={() => setView("simulate-payment")}
     />
   );
 }
